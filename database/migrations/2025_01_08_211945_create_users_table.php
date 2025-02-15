@@ -13,7 +13,7 @@
         {
             Schema::create('users', function (Blueprint $table) {
                 $table->id();
-                $table->string('school_id')->constrained('schools', 'id')->onDelete('cascade');
+                $table->foreignId('school_id')->constrained()->onDelete('cascade');
                 $table->enum('role', ['superadmin', 'admin', 'teacher'])->default('teacher');
                 $table->string('name');
                 $table->string('email')->unique();

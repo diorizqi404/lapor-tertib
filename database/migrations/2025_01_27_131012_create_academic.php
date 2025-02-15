@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('school_id')->constrained('schools', 'id')->onDelete('cascade');
+            $table->foreignId('school_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('initial');
             $table->timestamps();
@@ -21,17 +21,16 @@ return new class extends Migration
 
         Schema::create('grades', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('school_id')->constrained('schools', 'id')->onDelete('cascade');
+            $table->foreignId('school_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->timestamps();
         });
 
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('school_id')->constrained('schools', 'id')->onDelete('cascade');
-            $table->unsignedBigInteger('department_id')->nullable();
-            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
-            $table->unsignedBigInteger('grade_id')->constrained('grades', 'id')->onDelete('cascade');
+            $table->foreignId('school_id')->constrained()->onDelete('cascade');
+            $table->foreignId('department_id')->nullable()->constrained('departments')->onDelete('cascade');
+            $table->foreignId('grade_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->timestamps();
         });

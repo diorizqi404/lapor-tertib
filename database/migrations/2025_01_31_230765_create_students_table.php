@@ -13,8 +13,8 @@
         {
             Schema::create('students', function (Blueprint $table) {
                 $table->id();
-                $table->unsignedBigInteger('school_id')->constrained('schools', 'id')->onDelete('cascade');
-                $table->unsignedBigInteger('class_id')->constrained('classes', 'id')->onDelete('cascade');
+                $table->foreignId('school_id')->constrained()->onDelete('cascade');
+                $table->foreignId('class_id')->constrained('classes')->onDelete('cascade');
                 $table->string('nis');
                 $table->string('name');
                 $table->enum('gender', ['L', 'P']);

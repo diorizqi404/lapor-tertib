@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('violation_categories', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('school_id')->constrained('schools', 'id')->onDelete('cascade');
+            $table->foreignId('school_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->integer('point');
             $table->string('description')->nullable();

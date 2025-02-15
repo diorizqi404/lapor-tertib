@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('violations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('school_id')->constrained('schools', 'id')->onDelete('cascade');
-            $table->unsignedBigInteger('teacher_id')->constrained('users', 'id')->onDelete('cascade');
-            $table->unsignedBigInteger('student_id')->constrained('students', 'id')->onDelete('cascade');
-            $table->unsignedBigInteger('violation_category_id')->constrained('violation_categories', 'id')->onDelete('cascade');
+            $table->foreignId('school_id')->constrained()->onDelete('cascade');
+            $table->foreignId('teacher_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
+            $table->foreignId('violation_category_id')->constrained('violation_categories')->onDelete('cascade');
             $table->datetime('datetime');
             $table->text('description');
             $table->integer('point');
