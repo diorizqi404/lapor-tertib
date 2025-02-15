@@ -4,6 +4,7 @@ namespace App\Livewire\Forms;
 
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -33,10 +34,16 @@ class LoginForm extends Form
         if (! Auth::attempt($this->only(['email', 'password']), $this->remember)) {
             RateLimiter::hit($this->throttleKey());
 
+            Log::warning('Authentication failed for email: ' . $this->email);
+
             throw ValidationException::withMessages([
                 'form.email' => trans('auth.failed'),
             ]);
         }
+
+        $user = Auth::user();
+        Log::info('Authentication successful for email: ' . $this->email);
+        Log::info('User authenticated: ' . $user->id . ', Role: ' . $user->role);
 
         RateLimiter::clear($this->throttleKey());
     }
@@ -69,4 +76,5 @@ class LoginForm extends Form
     {
         return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
     }
+
 }

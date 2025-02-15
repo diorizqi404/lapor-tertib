@@ -1,101 +1,85 @@
-{{--<!DOCTYPE html>--}}
-{{--<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">--}}
-{{--    <head>--}}
-{{--        <meta charset="utf-8">--}}
-{{--        <meta name="viewport" content="width=device-width, initial-scale=1">--}}
-{{--        <meta name="csrf-token" content="{{ csrf_token() }}">--}}
-
-{{--        <title>{{ config('app.name', 'Laravel') }}</title>--}}
-
-{{--        <!-- Fonts -->--}}
-{{--        <link rel="preconnect" href="https://fonts.bunny.net">--}}
-{{--        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />--}}
-
-{{--        <!-- Scripts -->--}}
-{{--        @vite(['resources/css/app.css', 'resources/js/app.js'])--}}
-{{--    </head>--}}
-{{--    <body class="font-sans antialiased">--}}
-{{--        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">--}}
-{{--            <livewire:layout.dashboard-navigation />--}}
-{{--            setelah livewire layout navigation--}}
-{{--            <!-- Page Heading -->--}}
-{{--            @if (isset($header))--}}
-{{--                <header class="bg-white dark:bg-gray-800 shadow">--}}
-{{--                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">--}}
-{{--                        {{ $header }}--}}
-{{--                    </div>--}}
-{{--                </header>--}}
-{{--            @endif--}}
-
-{{--            <!-- Page Content -->--}}
-{{--            <main>--}}
-{{--                {{ $slot }}--}}
-{{--            </main>--}}
-{{--        </div>--}}
-{{--    </body>--}}
-{{--</html>--}}
-
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        'primary': '#60a5fa',
-                        'primary-dark': '#3b82f6',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        /* Custom styles for chart placeholders */
-        .chart-placeholder {
-            background-image: linear-gradient(to right, #60a5fa 0%, #93c5fd 100%);
-        }
+    @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
+    @livewireStyles
 
-        .dark .chart-placeholder {
-            background-image: linear-gradient(to right, #3b82f6 0%, #60a5fa 100%);
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
-<div class="flex h-screen overflow-hidden">
-    <!-- Sidebar -->
-    <livewire:superadmin.sidebar />
 
-    <!-- Main Content -->
-    <div class="flex-1 flex flex-col overflow-hidden">
-        <livewire:layout.dashboard-navigation/>
-        <!-- Main Content Area -->
-        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900">
-            {{ $slot }}
-        </main>
+<body class="bg-gray-100 dark:bg-neutral-800 dark:text-white">
+    <!-- ========== HEADER ========== -->
+    <livewire:layout.dashboard-navigation />
+    <!-- ========== END HEADER ========== -->
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <div class="-mt-px">
+        <!-- Breadcrumb -->
+        <div
+            class="sticky top-0 inset-x-0  bg-white border-y px-4 sm:px-6 2xl:px-8 2xl:hidden dark:bg-neutral-800 dark:border-neutral-700">
+            <div class="flex items-center py-2">
+                <!-- Navigation Toggle -->
+                <button type="button"
+                    class="size-8 flex justify-center items-center gap-x-2 border border-gray-200 text-gray-800 hover:text-gray-500 rounded-lg focus:outline-none focus:text-gray-500 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700 dark:text-neutral-200 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
+                    aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-application-sidebar"
+                    aria-label="Toggle navigation" data-hs-overlay="#hs-application-sidebar">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect width="18" height="18" x="3" y="3" rx="2" />
+                        <path d="M15 3v18" />
+                        <path d="m8 9 3 3-3 3" />
+                    </svg>
+                </button>
+                <!-- End Navigation Toggle -->
+
+                <!-- Breadcrumb -->
+                <ol class="ms-3 flex items-center whitespace-nowrap">
+                    <li class="flex items-center text-sm text-gray-800 dark:text-neutral-400">
+                        Application Layout
+                        <svg class="shrink-0 mx-3 overflow-visible size-2.5 text-gray-400 dark:text-neutral-500"
+                            width="16" height="16" viewBox="0 0 16 16" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 1L10.6869 7.16086C10.8637 7.35239 10.8637 7.64761 10.6869 7.83914L5 14"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </li>
+                    <li class="text-sm font-semibold text-gray-800 truncate dark:text-neutral-400" aria-current="page">
+                        Dashboardssssssssssssss
+                    </li>
+                </ol>
+                <!-- End Breadcrumb -->
+            </div>
+        </div>
+        <!-- End Breadcrumb -->
     </div>
-</div>
 
-<script>
-    // Theme toggle functionality
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    themeToggleBtn.addEventListener('click', () => {
-        document.documentElement.classList.toggle('dark');
-    });
+    <!-- Sidebar -->
+    <livewire:layout.sidebar />
+    <!-- End Sidebar -->
 
-    // Sidebar toggle functionality (for mobile)
-    const sidebarToggleBtn = document.getElementById('sidebar-toggle');
-    const sidebar = document.querySelector('aside');
-    sidebarToggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('hidden');
-    });
-</script>
+    <!-- Content -->
+    <div class="w-full 2xl:ps-64">
+        <div class="p-4 pb-0 sm:p-6 space-y-4 sm:space-y-6">
+            <!-- your content goes here ... -->
+            {{ $slot }}
+        </div>
+    </div>
+    <!-- End Content -->
+    <!-- ========== END MAIN CONTENT ========== -->
+
+    <x-chatbot />
+    <script src="./node_modules/preline/dist/preline.js"></script>
+    @livewireScripts
 </body>
-</html>
 
+</html>
