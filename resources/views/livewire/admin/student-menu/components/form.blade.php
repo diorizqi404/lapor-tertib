@@ -23,16 +23,35 @@
             <div class="p-6 pt-0 overflow-y-auto">
                 <div class="grid gap-y-4">
 
+                    <!-- Form Group -->
+                    <div class="w-full">
+                        <x-input-label for="nis" class="block text-sm mb-2 dark:text-white"
+                            :value="'Nis'" />
+                        <div class="relative">
+                            <x-text-input type="text" id="nis" name="nis" required autofocus
+                                wire:model="nis" />
+                        </div>
+                        @error('nis')
+                            <span class="text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <!-- End Form Group -->
+
                     <div class="flex w-full  items-end space-x-2">
                         <!-- Form Group -->
-                        <div class="w-1/2">
-                            <x-input-label for="nis" class="block text-sm mb-2 dark:text-white"
-                                :value="'Nis'" />
-                            <div class="relative">
-                                <x-text-input type="text" id="nis" name="nis" required autofocus
-                                    wire:model="nis" />
-                            </div>
-                            @error('nis')
+                        <div class="relative w-1/2">
+                            <select wire:model.live="academic_year_id"
+                                class="peer p-4 pe-9 block w-full border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:ring-neutral-600 focus :pt-6 focus:pb-2 [&:not(:placeholder-shown)]:pt-6 [&:not(:placeholder-shown)]:pb-2 autofill:pt-6 autofill:pb-2">
+                                <option value="">Please select</option>
+                                @foreach ($academic_years as $id => $full_name)
+                                    <option value="{{ $id }}">{{ $full_name }}</option>
+                                @endforeach
+                            </select>
+                            <label
+                                class="absolute bottom-1 start-0 p-4 h-full truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-white peer-disabled:opacity-50 peer-disabled:pointer-events-none peer-focus:text-xs peer-focus:-translate-y-1.5 peer-focus:text-gray-500 dark:peer-focus:text-neutral-500 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:-translate-y-1.5 peer-[:not(:placeholder-shown)]:text-gray-500 dark:peer-[:not(:placeholder-shown)]:text-neutral-500">
+                                Select Year
+                            </label>
+                            @error('academic_year_id')
                                 <span class="text-red-500">{{ $message }}</span>
                             @enderror
                         </div>

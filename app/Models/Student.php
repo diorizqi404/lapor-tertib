@@ -21,4 +21,14 @@ class Student extends Model
     {
         return $this->belongsTo(Classes::class, 'class_id');
     }
+
+    public function violations()
+    {
+        return $this->hasMany(Violation::class);
+    }
+
+    public function academicYear()
+    {
+        return $this->belongsTo(AcademicYear::class, 'academic_year_id');
+    }
 }

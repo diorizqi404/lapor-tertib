@@ -3,7 +3,10 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Classes;
+use App\Models\AcademicYear;
+use App\Models\Grade;
 use App\Models\Student as ModelsStudent;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -14,7 +17,7 @@ class Student extends Component
 {
 	use WithPagination, WithFileUploads;
 
-	public $student, $school_id, $class_id, $nis, $name, $gender, $photo, $parent_phone;
+	public $student, $school_id, $class_id, $academic_year_id, $nis, $name, $gender, $photo, $parent_phone;
 	public $isModalOpen = false;
 	public $isModalImportOpen = false;
 	public $isEdit = false;
@@ -24,19 +27,41 @@ class Student extends Component
 	public $excel;
 	public $perPage = 10;
 
+	public $is_sync = false;
+
 	public function render()
 	{
-		$query = ModelsStudent::where('school_id', Auth::user()->school_id)
-			->with('class.grade', 'class.department');
+		$queryActive = ModelsStudent::where('school_id', Auth::user()->school_id)
+			->whereHas('academicYear', function ($q) {
+				$q->where('status', 'active');
+			})
+			->with(['class.grade', 'class.department', 'academicYear' => function ($q) {
+				$q->select('id', DB::raw("CONCAT(YEAR(start_date), '/', YEAR(end_date)) as full_name"));
+			}]);
+
+		$queryInactive = ModelsStudent::where('school_id', Auth::user()->school_id)
+			->whereHas('academicYear', function ($q) {
+				$q->where('status', 'inactive');
+			})
+			->with(['class.grade', 'class.department', 'academicYear' => function ($q) {
+				$q->select('id', DB::raw("CONCAT(YEAR(start_date), '/', YEAR(end_date)) as full_name"));
+			}]);
 
 		if ($this->keyword) {
-			$query->where(function ($q) {
+			$queryActive->where(function ($q) {
+				$q->where('nis', 'like', '%' . $this->keyword . '%')
+					->orWhere('name', 'like', '%' . $this->keyword . '%');
+			});
+
+			$queryInactive->where(function ($q) {
 				$q->where('nis', 'like', '%' . $this->keyword . '%')
 					->orWhere('name', 'like', '%' . $this->keyword . '%');
 			});
 		}
 
-		$students = $query->orderBy('nis', 'asc')->paginate($this->perPage);
+
+		$activeStudents = $queryActive->orderBy('nis', 'asc')->paginate($this->perPage);
+		$inactiveStudents = $queryInactive->orderBy('nis', 'asc')->paginate($this->perPage);
 
 		$classes = DB::table('classes')
 			->join('grades', 'grades.id', '=', 'classes.grade_id')
@@ -48,9 +73,23 @@ class Student extends Component
 			)
 			->pluck('full_name', 'classes.id');
 
+		$academic_years = AcademicYear::where('school_id', Auth::user()->school_id)
+			->where('status', 'active')
+			->select('id', DB::raw("CONCAT(YEAR(start_date), '/', YEAR(end_date)) as full_name"))
+			->pluck('full_name', 'id');
+
+		$inactive_count = ModelsStudent::where('school_id', Auth::user()->school_id)
+			->whereHas('academicYear', function ($q) {
+				$q->where('status', 'inactive');
+			})
+			->count();
+
 		return view('livewire.admin.student-menu.student', [
-			'students' => $students,
-			'classes' => $classes
+			'activeStudents' => $activeStudents,
+			'inactiveStudents' => $inactiveStudents,
+			'classes' => $classes,
+			'academic_years' => $academic_years,
+			'inactive_count' => $inactive_count
 		]);
 	}
 
@@ -69,6 +108,7 @@ class Student extends Component
 	{
 		$this->school_id = '';
 		$this->class_id = '';
+		$this->academic_year_id = '';
 		$this->nis = '';
 		$this->name = '';
 		$this->gender = '';
@@ -81,6 +121,7 @@ class Student extends Component
 	{
 		return [
 			'class_id' => 'required',
+			'academic_year_id' => 'required',
 			'nis' => 'required|numeric|unique:students,nis,' . ($this->student->id ?? 'NULL') . ',id,school_id,' . Auth::user()->school_id,
 			'name' => 'required|string',
 			'gender' => 'required|in:L,P',
@@ -106,6 +147,7 @@ class Student extends Component
 			ModelsStudent::create([
 				'school_id' => Auth::user()->school_id,
 				'class_id' => $this->class_id,
+				'academic_year_id' => $this->academic_year_id,
 				'nis' => $this->nis,
 				'name' => $this->name,
 				'gender' => $this->gender,
@@ -128,6 +170,7 @@ class Student extends Component
 		$this->student = $student;
 		$this->school_id = $student->school_id;
 		$this->class_id = $student->class_id;
+		$this->academic_year_id = $student->academic_year_id;
 		$this->nis = $student->nis;
 		$this->name = $student->name;
 		$this->gender = $student->gender;
@@ -145,6 +188,7 @@ class Student extends Component
 		DB::transaction(function () use ($profilePhotoPath) {
 			ModelsStudent::find($this->student->id)->update([
 				'class_id' => $this->class_id,
+				'academic_year_id' => $this->academic_year_id,
 				'nis' => $this->nis,
 				'name' => $this->name,
 				'gender' => $this->gender,
@@ -160,7 +204,7 @@ class Student extends Component
 
 	public function delete()
 	{
-		if(count($this->selected_id) == 0) {
+		if (count($this->selected_id) == 0) {
 			flash()->error('Please select at least one student');
 			return;
 		}
@@ -170,5 +214,71 @@ class Student extends Component
 			flash()->success('Student deleted successfully');
 		});
 		$this->selected_id = [];
+	}
+
+	public function syncYear()
+	{
+		$today = now();
+		$currentAcademicYear = AcademicYear::where('school_id', Auth::user()->school_id)
+			->where('status', 'active')
+			->first();
+
+		// cek apakah sudah tahun ajaran baru
+		if ($today->format('Y-m-d') > $currentAcademicYear->end_date) {
+			// jika ya, maka buat tahun ajar baru
+			$newAcademicYear = AcademicYear::create([
+				'school_id' => Auth::user()->school_id,
+				'start_date' => Carbon::createFromDate(Carbon::parse($currentAcademicYear->end_date)->year, Carbon::parse($currentAcademicYear->start_date)->month, Carbon::parse($currentAcademicYear->start_date)->day)->format('Y-m-d'),
+				'end_date' => Carbon::createFromDate(Carbon::parse($currentAcademicYear->end_date)->year + 1, Carbon::parse($currentAcademicYear->end_date)->month, Carbon::parse($currentAcademicYear->end_date)->day)->format('Y-m-d'),
+			]);
+
+			// matikan tahun ajaran sebelumnya
+			$currentAcademicYear->update(['status' => 'inactive']);
+
+			// proses pindah tahun ajaran ke siswa dan naik kelas
+			$students = ModelsStudent::where('school_id', Auth::user()->school_id)
+				->with('class.grade')
+				->get();
+
+			foreach ($students as $student) {
+				$nextGrade = Grade::where('school_id', Auth::user()->school_id)
+					->where('name', '>', $student->class->grade->name)
+					->first();
+
+				if ($nextGrade) {
+					$nextClass = Classes::where('school_id', Auth::user()->school_id)
+						->where('grade_id', $nextGrade->id)
+						->where('name', $student->class->name)
+						->first();
+
+					if ($nextClass) {
+						$student->update(['academic_year_id' => $newAcademicYear->id, 'class_id' => $nextClass->id]);
+					}
+
+					// flash()->success('Academic year updated successfully');
+					$this->is_sync = true;
+					$this->dispatch('sync', $this->is_sync);
+				}
+			}
+		} else {
+			$this->dispatch('sync', $this->is_sync);
+		}
+	}
+
+	public function deleteAllInactive()
+	{
+		DB::transaction(function () {
+			$inactiveAcademicYears = AcademicYear::where('school_id', Auth::user()->school_id)
+				->where('status', 'inactive')
+				->pluck('id');
+
+			if ($inactiveAcademicYears->isNotEmpty()) {
+				ModelsStudent::where('school_id', Auth::user()->school_id)
+					->whereIn('academic_year_id', $inactiveAcademicYears)
+					->lockForUpdate()
+					->delete();
+			}
+		});
+		flash()->success('All students deleted successfully');
 	}
 }

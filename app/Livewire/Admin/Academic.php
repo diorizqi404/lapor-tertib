@@ -5,6 +5,7 @@
     use App\Models\Classes;
     use App\Models\Department;
     use App\Models\Grade;
+    use App\Models\AcademicYear;
     use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Facades\Auth;
     use Livewire\Component;
@@ -13,7 +14,7 @@
     {
         public $school_id;
 
-        // departments
+        // DEPARTMENT
         public $dept_name = [];
         public $dept_initial = [];
         public $deptSelected_id = [];
@@ -22,6 +23,16 @@
         public $isAddDeptClicked = false;
         public $isEditFormDeptOpen = false;
         public $editingDeptId = null;
+
+        // ACADEMIC_YEAR
+        public $academic_start_date = [];
+        public $academic_end_date = [];
+        public $academicSelected_id = [];
+        public $isEditingAcademic = false;
+        public $isAddFormAcademicOpen = false;
+        public $isAddAcademicClicked = false;
+        public $isEditFormAcademicOpen = false;
+        public $editingAcademicId = null;
 
         // GRADE
         public $grade_name = [];
@@ -60,10 +71,14 @@
                 ->with('department', 'grade')
                 ->paginate($this->perPage);
 
+            $academic_years = AcademicYear::where('school_id', $this->school_id)
+                ->paginate($this->perPage);
+
             return view('livewire.admin.academic-menu.academic', [
                 'departments' => $departments,
                 'grades' => $grades,
                 'classes' => $classes,
+                'academic_years' => $academic_years,
             ]);
         }
 
@@ -73,10 +88,12 @@
                 unset($this->dept_name, $this->dept_initial);
                 unset($this->grade_name);
                 unset($this->class_dept_id, $this->class_grade_id, $this->class_name);
+                unset($this->academic_start_date, $this->academic_end_date);
             } else {
                 unset($this->dept_name[$id], $this->dept_initial[$id]);
                 unset($this->grade_name[$id]);
                 unset($this->class_dept_id[$id], $this->class_grade_id[$id], $this->class_name[$id]);
+                unset($this->academic_start_date[$id], $this->academic_end_date[$id]);
             }
             $this->resetValidation();
         }
@@ -167,6 +184,93 @@
             flash()->success("Department deleted successfully.");
         }
         // END DEPARTMENT
+
+        public function openAddFormAcademic()
+        {
+            if ($this->isAddAcademicClicked) {
+                $this->isAddFormAcademicOpen = false;
+                $this->isAddAcademicClicked = false;
+                $this->resetInputFields();
+            } else {
+                $this->isAddFormAcademicOpen = true;
+                $this->isAddAcademicClicked = true;
+
+                $this->isEditFormAcademicOpen = false;
+                $this->editingAcademicId = null;
+                $this->isEditingAcademic = false;
+            }
+        }
+
+        public function openEditFormAcademic($id)
+        {
+            if ($this->editingAcademicId === $id) {
+                $this->isEditingAcademic = false;
+                $this->isEditFormAcademicOpen = false;
+                $this->editingAcademicId = null;
+                $this->resetInputFields();
+            } else {
+                $this->isEditingAcademic = true;
+                $this->isEditFormAcademicOpen = true;
+                $this->editingAcademicId = $id;
+                $this->isAddFormAcademicOpen = false;
+                $this->isAddAcademicClicked = false;
+            }
+        }
+
+        public function academic_rules($id = null)
+        {
+            if (!$this->isEditingAcademic) {
+                return [
+                    'academic_start_date' => 'required|date',
+                    'academic_end_date' => 'required|date',
+                ];
+            } else {
+                return [
+                    "academic_start_date.$id" => 'nullable|date',
+                    "academic_end_date.$id" => 'nullable|date',
+                ];
+            }
+        }
+
+        public function academic_store()
+        {
+            $this->validate($this->academic_rules());
+
+            DB::transaction(function () {
+                AcademicYear::lockForUpdate()->create([
+                    'school_id' => $this->school_id,
+                    'start_date' => $this->academic_start_date,
+                    'end_date' => $this->academic_end_date,
+                ]);
+            });
+            flash()->success('Academic year created successfully.');
+            $this->resetInputFields();
+        }
+
+        public function academic_update($id)
+        {
+            $this->validate($this->academic_rules($id));
+
+            $academic = AcademicYear::findOrFail($id);
+
+            DB::transaction(function () use ($id, $academic) {
+                AcademicYear::lockForUpdate()->where('id', $id)->update([
+                    'start_date' => $this->academic_start_date[$id] ?? $academic->start_date,
+                    'end_date' => $this->academic_end_date[$id] ?? $academic->end_date,
+                ]);
+            });
+            flash()->success('Academic year updated successfully.');
+            $this->resetInputFields($id);
+        }
+
+        public function academic_delete()
+        {
+            DB::transaction(function () {
+                AcademicYear::lockForUpdate()->whereIn('id', $this->academicSelected_id)->delete();
+            });
+            $this->academicSelected_id = [];
+            flash()->success("Academic year deleted successfully.");
+        }
 
         // GRADE
         public function openAddFormGrade()

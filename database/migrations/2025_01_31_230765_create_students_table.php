@@ -15,6 +15,7 @@
                 $table->id();
                 $table->foreignId('school_id')->constrained()->onDelete('cascade');
                 $table->foreignId('class_id')->constrained('classes')->onDelete('cascade');
+                $table->foreignId('academic_year_id')->constrained()->onDelete('cascade');
                 $table->string('nis');
                 $table->string('name');
                 $table->enum('gender', ['L', 'P']);
