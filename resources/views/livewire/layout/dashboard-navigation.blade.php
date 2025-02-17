@@ -16,72 +16,6 @@ new class extends Component {
 };
 ?>
 
-<!-- Header -->
-{{-- <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700"> --}}
-{{--    <div class="flex items-center justify-between p-4"> --}}
-{{--        <button class="md:hidden text-gray-500 dark:text-gray-400" id="sidebar-toggle"> --}}
-{{--            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" --}}
-{{--                 xmlns="http://www.w3.org/2000/svg"> --}}
-{{--                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" --}}
-{{--                      d="M4 6h16M4 12h16M4 18h16"></path> --}}
-{{--            </svg> --}}
-{{--        </button> --}}
-{{--        <div class="flex items-center"> --}}
-{{--            <input type="text" placeholder="Search..." --}}
-{{--                   class="px-3 py-2 rounded-md bg-gray-100 dark:bg-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-dark transition duration-200"> --}}
-{{--        </div> --}}
-{{--        <div class="flex items-center space-x-4"> --}}
-{{--            --}}{{-- search icon --}}
-{{--            <button class="text-gray-500 dark:text-gray-400"> --}}
-{{--                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" --}}
-{{--                     xmlns="http://www.w3.org/2000/svg"> --}}
-{{--                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" --}}
-{{--                          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path> --}}
-{{--                </svg> --}}
-{{--            </button> --}}
-
-{{--            <!-- Settings Dropdown --> --}}
-{{--            <div class="hidden sm:flex sm:items-center sm:ms-6"> --}}
-{{--                <x-dropdown> --}}
-{{--                    <x-slot name="trigger"> --}}
-{{--                        <button --}}
-{{--                            class="inline-flex items-center px-3 py-2 border border-transparent text-md leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"> --}}
-{{--                            --}}{{-- icon person/user --}}
-{{--                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" --}}
-{{--                                 xmlns="http://www.w3.org/2000/svg"> --}}
-{{--                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" --}}
-{{--                                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path> --}}
-{{--                            </svg> --}}
-
-{{--                            --}}{{-- text username --}}
-{{--                            <div x-data="{{ json_encode(['name' => auth()->user()->school_id]) }}" x-text="name" --}}
-{{--                                 x-on:profile-updated.window="name = $event.detail.name"></div> --}}
-
-{{--                            --}}{{-- dropdown icon --}}
-{{--                            <div class="ms-1"> --}}
-{{--                                ⬇️ --}}
-{{--                            </div> --}}
-{{--                        </button> --}}
-{{--                    </x-slot> --}}
-
-{{--                    <x-slot name="content"> --}}
-{{--                        <x-dropdown-link :href="route('profile')" wire:navigate> --}}
-{{--                            🙎{{ __('Profile') }} --}}
-{{--                        </x-dropdown-link> --}}
-
-{{--                        <!-- Authentication --> --}}
-{{--                        <button wire:click="logout" class="w-full text-start"> --}}
-{{--                            <x-dropdown-link> --}}
-{{--                                🚪 {{ __('Log Out') }} --}}
-{{--                            </x-dropdown-link> --}}
-{{--                        </button> --}}
-{{--                    </x-slot> --}}
-{{--                </x-dropdown> --}}
-{{--            </div> --}}
-{{--        </div> --}}
-{{--    </div> --}}
-{{-- </header> --}}
-
 <header
     class="z-10 sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap w-full bg-white border-b text-sm py-2.5 lg:ps-[260px] dark:bg-neutral-800 dark:border-neutral-700">
     <nav class="px-4 sm:px-6 flex basis-full items-center w-full mx-auto">
@@ -174,34 +108,16 @@ new class extends Component {
                     <span class="sr-only">Search</span>
                 </button>
 
-                <button type="button"
-                    class="size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
-                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-                    </svg>
-                    <span class="sr-only">Notifications</span>
-                </button>
-
-                <button type="button"
-                    class="size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
-                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                    </svg>
-                    <span class="sr-only">Activity</span>
-                </button>
-
                 <!-- Dropdown -->
                 <div class="hs-dropdown [--placement:bottom-right] relative inline-flex">
                     <button id="hs-dropdown-account" type="button"
                         class="size-[38px] inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 focus:outline-none disabled:opacity-50 disabled:pointer-events-none dark:text-white"
                         aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
+                        @php
+                            $photo = Auth::user()->photo ? Auth::user()->photo : 'profile_photos/man.png';
+                        @endphp
                         <img class="shrink-0 size-[38px] rounded-full"
-                            src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
+                            src="{{ Storage::url($photo) }}"
                             alt="Avatar">
                     </button>
 
@@ -209,53 +125,13 @@ new class extends Component {
                         role="menu" aria-orientation="vertical" aria-labelledby="hs-dropdown-account">
                         <div class="py-3 px-5 bg-gray-100 rounded-t-lg dark:bg-neutral-700">
                             <p class="text-sm text-gray-500 dark:text-neutral-500">Signed in as</p>
-                            <p class="text-sm font-medium text-gray-800 dark:text-neutral-200">james@site.com</p>
+                            <p class="text-sm font-medium text-gray-800 dark:text-neutral-200">{{ Auth::user()->email }}</p>
                         </div>
                         <div class="p-1.5 space-y-0.5">
                             <a wire:click="logout"
-                                class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
-                                href="#">
-                                <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
-                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-                                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-                                </svg>
+                                class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-red-500 hover:bg-red-100 focus:outline-none focus:bg-red-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300">
+                                <x-heroicon-o-arrow-right-end-on-rectangle class="h-5 w-5 text-red-500" />
                                 Logout
-                            </a>
-                            <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
-                                href="#">
-                                <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
-                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
-                                    <path d="M3 6h18" />
-                                    <path d="M16 10a4 4 0 0 1-8 0" />
-                                </svg>
-                                Purchases
-                            </a>
-                            <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
-                                href="#">
-                                <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
-                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
-                                    <path d="M12 12v9" />
-                                    <path d="m8 17 4 4 4-4" />
-                                </svg>
-                                Downloads
-                            </a>
-                            <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
-                                href="#">
-                                <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
-                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                                    <circle cx="9" cy="7" r="4" />
-                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                                </svg>
-                                Team Account
                             </a>
                         </div>
                     </div>

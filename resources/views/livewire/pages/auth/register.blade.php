@@ -75,85 +75,93 @@ new #[Layout('layouts.guest')] class extends Component {
 ?>
 
 <div>
-    <form wire:submit="register">
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('School Name')" />
-            <x-text-input wire:model="name" id="name" class="block mt-1 w-full" type="text" name="name" required
-                autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+    <form wire:submit="register" class="w-full sm:grid sm:grid-cols-1 sm:gap-4 sm:items-start">
+        <x-text-heading-1 class="text-center font-semibold text-blue-900 underline underline-offset-2 decoration-solid">Pendaftaran Sekolah & Admin</x-text-heading-1>
+        <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-4">
+            <!-- Name -->
+            <div class="col-span-1">
+                <x-input-label for="name" :value="__('School Name')" />
+                <x-text-input wire:model="name" id="name" class="block mt-1 w-full" type="text" name="name"
+                    required autofocus autocomplete="name" />
+                <x-input-error :messages="$errors->get('name')" class="mt-2" />
+            </div>
+
+            <!-- Email Address -->
+            <div class="col-span-1">
+                <x-input-label for="email" :value="__('School Email')" />
+                <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email"
+                    required autocomplete="username" />
+                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            </div>
+
+            <!-- Address -->
+            <div class="col-span-1">
+                <x-input-label for="address" :value="__('School Address')" />
+                <x-text-input wire:model="address" id="address" class="block mt-1 w-full" type="text"
+                    name="address" required autocomplete="address" />
+                <x-input-error :messages="$errors->get('address')" class="mt-2" />
+            </div>
+
+            <!-- Phone -->
+            <div class="col-span-1">
+                <x-input-label for="phone" :value="__('School Phone')" />
+                <x-text-input wire:model="phone" id="phone" class="block mt-1 w-full" type="text" name="phone"
+                    required autocomplete="phone" />
+                <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+            </div>
         </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('School Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email"
-                required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-4 mt-8">
+            <!-- Admin Name -->
+            <div class="col-span-1">
+                <x-input-label for="admin_name" :value="__('Admin Name')" />
+                <x-text-input wire:model="admin_name" id="admin_name" class="block mt-1 w-full" type="text"
+                    name="admin_name" required autocomplete="admin_name" />
+                <x-input-error :messages="$errors->get('admin_name')" class="mt-2" />
+            </div>
 
-        <!-- Address -->
-        <div class="mt-4">
-            <x-input-label for="address" :value="__('School Address')" />
-            <x-text-input wire:model="address" id="address" class="block mt-1 w-full" type="text" name="address"
-                required autocomplete="address" />
-            <x-input-error :messages="$errors->get('address')" class="mt-2" />
-        </div>
+            <!-- Admin Email Address -->
+            <div class="col-span-1">
+                <x-input-label for="admin_email" :value="__('Admin Email')" />
+                <x-text-input wire:model="admin_email" id="admin_email" class="block mt-1 w-full" type="email"
+                    name="admin_email" required autocomplete="admin_email" />
+                <x-input-error :messages="$errors->get('admin_email')" class="mt-2" />
+            </div>
 
-        <!-- Phone -->
-        <div class="mt-4">
-            <x-input-label for="phone" :value="__('School Phone')" />
-            <x-text-input wire:model="phone" id="phone" class="block mt-1 w-full" type="text" name="phone"
-                required autocomplete="phone" />
-            <x-input-error :messages="$errors->get('phone')" class="mt-2" />
-        </div>
+            <div class="col-span-2 max-sm:col-span-1 grid grid-cols-3 max-sm:grid-cols-1 gap-4">
+                <!-- Admin Phone -->
+                <div class="mt-4">
+                    <x-input-label for="admin_phone" :value="__('Admin Phone')" />
+                    <x-text-input wire:model="admin_phone" id="admin_phone" class="block mt-1 w-full" type="text"
+                        name="admin_phone" required autocomplete="admin_phone" />
+                    <x-input-error :messages="$errors->get('admin_phone')" class="mt-2" />
+                </div>
 
-        <!-- Admin Name -->
-        <div class="mt-4">
-            <x-input-label for="admin_name" :value="__('Admin Name')" />
-            <x-text-input wire:model="admin_name" id="admin_name" class="block mt-1 w-full" type="text"
-                name="admin_name" required autocomplete="admin_name" />
-            <x-input-error :messages="$errors->get('admin_name')" class="mt-2" />
-        </div>
+                <!-- Password -->
+                <div class="mt-4">
+                    <x-input-label for="password" :value="__('Password')" />
 
-        <!-- Admin Email Address -->
-        <div class="mt-4">
-            <x-input-label for="admin_email" :value="__('Admin Email')" />
-            <x-text-input wire:model="admin_email" id="admin_email" class="block mt-1 w-full" type="email"
-                name="admin_email" required autocomplete="admin_email" />
-            <x-input-error :messages="$errors->get('admin_email')" class="mt-2" />
-        </div>
+                    <x-text-input wire:model="password" id="password" class="block mt-1 w-full" type="password"
+                        name="password" required autocomplete="new-password" />
 
-        <!-- Admin Phone -->
-        <div class="mt-4">
-            <x-input-label for="admin_phone" :value="__('Admin Phone')" />
-            <x-text-input wire:model="admin_phone" id="admin_phone" class="block mt-1 w-full" type="text"
-                name="admin_phone" required autocomplete="admin_phone" />
-            <x-input-error :messages="$errors->get('admin_phone')" class="mt-2" />
-        </div>
+                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+                <!-- Confirm Password -->
+                <div class="mt-4">
+                    <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
 
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full" type="password" name="password"
-                required autocomplete="new-password" />
+                    <x-text-input wire:model="password_confirmation" id="password_confirmation"
+                        class="block mt-1 w-full" type="password" name="password_confirmation" required
+                        autocomplete="new-password" />
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                type="password" name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                    <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                </div>
+            </div>
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                 href="{{ route('login') }}" wire:navigate>
                 {{ __('Already registered?') }}
             </a>

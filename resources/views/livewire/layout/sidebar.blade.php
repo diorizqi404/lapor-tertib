@@ -21,10 +21,7 @@
     <div class="relative flex flex-col h-full max-h-full">
         <div class="px-6 pt-4 flex items-center">
             <!-- Logo -->
-            <a class="flex-none rounded-xl text-xl inline-block font-semibold focus:outline-none focus:opacity-80"
-                href="#" aria-label="Preline">
-                Laporkan
-            </a>
+            <x-application-logo class="w-10 h-10 fill-current text-orange-500 font-bold" />
             <!-- End Logo -->
 
             <div class="hidden xl:block ms-2">
@@ -33,7 +30,7 @@
 
         <!-- Content -->
         <div
-            class="mt-14 h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
+            class="mt-8 h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
             <nav class="hs-accordion-group p-3 w-full flex flex-col flex-wrap" data-hs-accordion-always-open>
                 <ul class="flex flex-col space-y-2">
 
