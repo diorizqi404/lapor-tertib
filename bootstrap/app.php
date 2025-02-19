@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Routing\Exceptions\InvalidSignatureException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,8 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'superadmin' => \App\Http\Middleware\SuperAdmin::class,
             'teacher' => \App\Http\Middleware\Teacher::class,
+            'student' => \App\Http\Middleware\Student::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->render(function (InvalidSignatureException $e) {
+            return redirect()->route('student.search');
+        });
     })->create();

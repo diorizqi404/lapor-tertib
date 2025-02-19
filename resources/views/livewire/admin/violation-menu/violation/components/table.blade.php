@@ -111,180 +111,184 @@ $classBox = 'my-8  bg-white border border-gray-200 rounded-xl shadow-sm overflow
     <!-- Table -->
     <div class="-m-1.5 overflow-x-auto">
         <div class="p-1.5 min-w-full inline-block align-middle">
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-                <thead class="bg-gray-50 dark:bg-neutral-800">
-                    <tr>
-                        <th scope="col" class="ps-6 py-3 text-start">
-
-                        </th>
-
-                        <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
-                            <div class="flex items-center gap-x-2">
-                                <span
-                                    class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                    Student Name
-                                </span>
-                            </div>
-                        </th>
-
-                        <th scope="col" class="px-6 py-3 text-start">
-                            <div class="flex items-center gap-x-2">
-                                <span
-                                    class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                    Violation
-                                </span>
-                            </div>
-                        </th>
-
-                        <th scope="col" class="px-6 py-3 text-start">
-                            <div class="flex items-center gap-x-2">
-                                <span
-                                    class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                    Datetime
-                                </span>
-                            </div>
-                        </th>
-
-                        <th scope="col" class="px-6 py-3 text-start">
-                            <div class="flex items-center gap-x-2">
-                                <span
-                                    class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                    Description
-                                </span>
-                            </div>
-                        </th>
-
-                        <th scope="col" class="px-6 py-3 text-start">
-                            <div class="flex items-center gap-x-2">
-                                <span
-                                    class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                    Photo
-                                </span>
-                            </div>
-                        </th>
-
-                        <th scope="col" class="px-6 py-3 text-start">
-                            <div class="flex items-center gap-x-2">
-                                <span
-                                    class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                    Teacher Assigne
-                                </span>
-                            </div>
-                        </th>
-
-                        <th scope="col" class="px-6 py-3 text-end"></th>
-                    </tr>
-                </thead>
-
-                <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                    @foreach ($violations as $v)
+            @if (count($violations) === 0)
+                <x-empty-table class="h-full" />
+            @else
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                    <thead class="bg-gray-50 dark:bg-neutral-800">
                         <tr>
-                            <td class="size-px whitespace-nowrap">
-                                <div class="ps-6 py-3">
-                                    <label for="hs-at-with-checkboxes-1" class="flex">
-                                        <input type="checkbox"
-                                            class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                                            id="hs-at-with-checkboxes-1" value="{{ $v->id }}"
-                                            wire:key="{{ $v->id }}" wire:model.live="selected_id">
-                                        <span class="sr-only">Checkbox</span>
-                                    </label>
-                                </div>
-                            </td>
-                            <td class="h-px w-72 whitespace-nowrap">
-                                <div class="px-6 py-3">
-                                    <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
-                                        {{ $v->student->name }}
+                            <th scope="col" class="ps-6 py-3 text-start">
+
+                            </th>
+
+                            <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
+                                <div class="flex items-center gap-x-2">
+                                    <span
+                                        class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                        Student Name
                                     </span>
                                 </div>
-                            </td>
-                            <td class="h-px w-72 whitespace-nowrap">
-                                <div class="px-6 py-3">
-                                    <div class="grow">
-                                        <span
-                                            class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ $v->ViolationCategory->name }}</span>
-                                        <span
-                                            class="block text-sm text-gray-500 dark:text-neutral-500">{{ $v->ViolationCategory->point }}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="h-px w-72 whitespace-nowrap">
-                                <div class="px-6 py-3">
-                                    <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
-                                        {{ \Carbon\Carbon::parse($v->datetime)->format('d M Y, H:i') }}
+                            </th>
+
+                            <th scope="col" class="px-6 py-3 text-start">
+                                <div class="flex items-center gap-x-2">
+                                    <span
+                                        class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                        Violation
                                     </span>
                                 </div>
-                            </td>
-                            <td class="h-px w-72 whitespace-nowrap">
-                                <div class="px-6 py-3">
-                                    <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
-                                        {{ $v->description }}
+                            </th>
+
+                            <th scope="col" class="px-6 py-3 text-start">
+                                <div class="flex items-center gap-x-2">
+                                    <span
+                                        class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                        Datetime
                                     </span>
                                 </div>
-                            </td>
-                            <td class="h-px w-72 whitespace-nowrap">
-                                <div class="px-6 py-3">
-                                    <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
-                                        <button type="button"
-                                            class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                                            aria-haspopup="dialog" aria-expanded="false"
-                                            data-hs-overlay="#hs-basic-modal-photo-{{ $v->id }}">
-                                            Open modal
-                                        </button>
+                            </th>
+
+                            <th scope="col" class="px-6 py-3 text-start">
+                                <div class="flex items-center gap-x-2">
+                                    <span
+                                        class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                        Description
                                     </span>
                                 </div>
-                            </td>
-                            <div id="hs-basic-modal-photo-{{ $v->id }}"
-                                class="hs-overlay hs-overlay-open:opacity-100 hs-overlay-open:duration-500 hidden size-full fixed top-0 start-0 z-[80] opacity-0 overflow-x-hidden transition-all overflow-y-auto pointer-events-none"
-                                role="dialog" tabindex="-1" aria-labelledby="hs-basic-modal-label">
-                                <div class="sm:max-w-lg sm:w-full m-3 sm:mx-auto">
-                                    <div
-                                        class="flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
-                                        <div
-                                            class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
-                                            <h3 id="hs-basic-modal-label"
-                                                class="font-bold text-gray-800 dark:text-white">
-                                                Incident Photo
-                                            </h3>
-                                            <button type="button"
-                                                class="size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:text-neutral-400 dark:focus:bg-neutral-600"
-                                                aria-label="Close"
-                                                data-hs-overlay="#hs-basic-modal-photo-{{ $v->id }}">
-                                                <span class="sr-only">Close</span>
-                                                <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
-                                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path d="M18 6 6 18"></path>
-                                                    <path d="m6 6 12 12"></path>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                        <div class="p-4 overflow-y-auto">
-                                            <img class="inline-block max-w-96" src="{{ Storage::url($v->photo) }}"
-                                                alt="Incident Photo">
-                                        </div>
-                                        <div
-                                            class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-                                            <button type="button"
-                                                class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                                                data-hs-overlay="#hs-basic-modal-photo-{{ $v->id }}">
-                                                Close
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <td class="h-px w-72 whitespace-nowrap">
-                                <div class="px-6 py-3">
-                                    <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
-                                        {{ $v->teacher->name }}
+                            </th>
+
+                            <th scope="col" class="px-6 py-3 text-start">
+                                <div class="flex items-center gap-x-2">
+                                    <span
+                                        class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                        Photo
                                     </span>
                                 </div>
-                            </td>
+                            </th>
+
+                            <th scope="col" class="px-6 py-3 text-start">
+                                <div class="flex items-center gap-x-2">
+                                    <span
+                                        class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                        Teacher Assigne
+                                    </span>
+                                </div>
+                            </th>
+
+                            <th scope="col" class="px-6 py-3 text-end"></th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                        @foreach ($violations as $v)
+                            <tr>
+                                <td class="size-px whitespace-nowrap">
+                                    <div class="ps-6 py-3">
+                                        <label for="hs-at-with-checkboxes-1" class="flex">
+                                            <input type="checkbox"
+                                                class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                                                id="hs-at-with-checkboxes-1" value="{{ $v->id }}"
+                                                wire:key="{{ $v->id }}" wire:model.live="selected_id">
+                                            <span class="sr-only">Checkbox</span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="h-px w-72 whitespace-nowrap">
+                                    <div class="px-6 py-3">
+                                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+                                            {{ $v->student->name }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="h-px w-72 whitespace-nowrap">
+                                    <div class="px-6 py-3">
+                                        <div class="grow">
+                                            <span
+                                                class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ $v->ViolationCategory->name }}</span>
+                                            <span
+                                                class="block text-sm text-gray-500 dark:text-neutral-500">{{ $v->ViolationCategory->point }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="h-px w-72 whitespace-nowrap">
+                                    <div class="px-6 py-3">
+                                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+                                            {{ \Carbon\Carbon::parse($v->datetime)->format('d M Y, H:i') }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="h-px w-72 whitespace-nowrap">
+                                    <div class="px-6 py-3">
+                                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+                                            {{ $v->description }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="h-px w-72 whitespace-nowrap">
+                                    <div class="px-6 py-3">
+                                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+                                            <button type="button"
+                                                class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                                                aria-haspopup="dialog" aria-expanded="false"
+                                                data-hs-overlay="#hs-basic-modal-photo-{{ $v->id }}">
+                                                Open modal
+                                            </button>
+                                        </span>
+                                    </div>
+                                </td>
+                                <div id="hs-basic-modal-photo-{{ $v->id }}"
+                                    class="hs-overlay hs-overlay-open:opacity-100 hs-overlay-open:duration-500 hidden size-full fixed top-0 start-0 z-[80] opacity-0 overflow-x-hidden transition-all overflow-y-auto pointer-events-none"
+                                    role="dialog" tabindex="-1" aria-labelledby="hs-basic-modal-label">
+                                    <div class="sm:max-w-lg sm:w-full m-3 sm:mx-auto">
+                                        <div
+                                            class="flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
+                                            <div
+                                                class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
+                                                <h3 id="hs-basic-modal-label"
+                                                    class="font-bold text-gray-800 dark:text-white">
+                                                    Incident Photo
+                                                </h3>
+                                                <button type="button"
+                                                    class="size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:text-neutral-400 dark:focus:bg-neutral-600"
+                                                    aria-label="Close"
+                                                    data-hs-overlay="#hs-basic-modal-photo-{{ $v->id }}">
+                                                    <span class="sr-only">Close</span>
+                                                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
+                                                        width="24" height="24" viewBox="0 0 24 24"
+                                                        fill="none" stroke="currentColor" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M18 6 6 18"></path>
+                                                        <path d="m6 6 12 12"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="p-4 overflow-y-auto">
+                                                <img class="inline-block max-w-96"
+                                                    src="{{ Storage::url($v->photo) }}" alt="Incident Photo">
+                                            </div>
+                                            <div
+                                                class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
+                                                <button type="button"
+                                                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                                                    data-hs-overlay="#hs-basic-modal-photo-{{ $v->id }}">
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <td class="h-px w-72 whitespace-nowrap">
+                                    <div class="px-6 py-3">
+                                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+                                            {{ $v->teacher->name }}
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
         </div>
     </div>
     <!-- End Table -->
@@ -325,4 +329,35 @@ $classBox = 'my-8  bg-white border border-gray-200 rounded-xl shadow-sm overflow
         {{--                            </div> --}}
     </div>
     <!-- End Footer -->
+    <script>
+        function initPreline() {
+            if (typeof HSOverlay !== 'undefined') {
+                HSOverlay.close('.hs-overlay');
+
+                // Destroy existing instances
+                document.querySelectorAll('.hs-overlay').forEach(overlay => {
+                    const instance = HSOverlay.getInstance(overlay);
+                    if (instance) {
+                        instance.destroy();
+                    }
+                });
+
+                // Reinit
+                HSOverlay.init();
+            }
+        }
+
+        // Listen untuk semua event Livewire yang mungkin memperbarui konten
+        document.addEventListener('livewire:initialized', () => {
+            initPreline();
+
+            Livewire.on('pelanggaran-created', () => {
+                setTimeout(initPreline, 100);
+            });
+        });
+
+        // Reinit setelah navigasi atau update
+        document.addEventListener('livewire:navigated', initPreline);
+        document.addEventListener('livewire:updated', initPreline);
+    </script>
 </div>

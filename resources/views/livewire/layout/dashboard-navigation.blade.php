@@ -114,7 +114,7 @@ new class extends Component {
                         class="size-[38px] inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 focus:outline-none disabled:opacity-50 disabled:pointer-events-none dark:text-white"
                         aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
                         @php
-                            $photo = Auth::user()->photo ? Auth::user()->photo : 'profile_photos/man.png';
+                            $photo = 'profile_photos/man.png';
                         @endphp
                         <img class="shrink-0 size-[38px] rounded-full"
                             src="{{ Storage::url($photo) }}"
@@ -125,11 +125,13 @@ new class extends Component {
                         role="menu" aria-orientation="vertical" aria-labelledby="hs-dropdown-account">
                         <div class="py-3 px-5 bg-gray-100 rounded-t-lg dark:bg-neutral-700">
                             <p class="text-sm text-gray-500 dark:text-neutral-500">Signed in as</p>
-                            <p class="text-sm font-medium text-gray-800 dark:text-neutral-200">{{ Auth::user()->email }}</p>
+                            @if (Auth::check())
+                                <p class="text-sm font-medium text-gray-800 dark:text-neutral-300">{{ Auth::user()->email }}</p>
+                            @endif
                         </div>
                         <div class="p-1.5 space-y-0.5">
                             <a wire:click="logout"
-                                class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-red-500 hover:bg-red-100 focus:outline-none focus:bg-red-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300">
+                                class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm cursor-pointer text-red-500 hover:bg-red-100 focus:outline-none focus:bg-red-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300">
                                 <x-heroicon-o-arrow-right-end-on-rectangle class="h-5 w-5 text-red-500" />
                                 Logout
                             </a>

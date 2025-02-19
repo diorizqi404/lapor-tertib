@@ -9,7 +9,11 @@
             </div>
             <!-- Tambahkan absolute dan full size -->
             <div class="relative pb-8 w-full h-96">
-                <div id="violationsOverTime" class="absolute inset-0 pt-10"></div>
+                @if ($violationsOverTime)
+                    <div id="violationsOverTime" class="absolute inset-0 pt-10"></div>
+                @else
+                    <x-empty-table class="h-full" />
+                @endif
             </div>
         </div>
 
@@ -17,82 +21,102 @@
         <div
             class="max-[1400px]:col-span-1 max-[900px]:col-span-3 flex justify-center flex-col items-center p-4 bg-white shadow rounded-lg h-[29rem]">
             <h2 class="text-2xl font-semibold mb-2">Violation Categories</h2>
-            <div class="w-[80%] max-[1800px]:w-[110%] max-[900px]:w-[60%] max-[600px]:w-full"
-                id="violationsByCategoryChart"></div>
+            @if ($violationsByCategory)
+                <div class="w-[80%] max-[1800px]:w-[110%] max-[900px]:w-[60%] max-[600px]:w-full"
+                    id="violationsByCategoryChart"></div>
+            @else
+                <x-empty-table class="h-full" />
+            @endif
         </div>
 
         <!-- Top 5 Siswa Pelanggaran -->
         <div class="col-span-1 max-[1400px]:col-span-2 max-[900px]:col-span-3 bg-white p-4 shadow rounded-lg">
             <h2 class="text-xl font-semibold mb-4">Top 5 Siswa Pelanggar Tertinggi</h2>
-            <ul class="space-y-2">
-                @foreach ($topViolatingStudents as $index => $student)
-                    <li class="flex justify-between items-center bg-white border-b-2 p-2">
-                        <div class="flex items-center">
-                            <h1 class="text-xl font-bold mr-4">{{ $index + 1 }}</h1>
-                            @php
-                                $defaultPhoto =
-                                    $student['gender'] == 'L' ? 'profile_photos/man.png' : 'profile_photos/woman.png';
-                            @endphp
-                            <img src="{{ $student['photo'] ? Storage::url($student['photo']) : Storage::url($defaultPhoto) }}" alt="Student Photo"
-                                class="w-12 h-12 rounded-full">
-                            <h1 class="ml-4 text-lg">
-                                {{ $student['name'] }}
+            <ul class="space-y-2 h-96">
+                @if ($topViolatingStudents)
+                    @foreach ($topViolatingStudents as $index => $student)
+                        <li class="flex justify-between items-center bg-white border-b-2 p-2">
+                            <div class="flex items-center">
+                                <h1 class="text-xl font-bold mr-4">{{ $index + 1 }}</h1>
+                                @php
+                                    $defaultPhoto =
+                                        $student['gender'] == 'L'
+                                            ? 'profile_photos/man.png'
+                                            : 'profile_photos/woman.png';
+                                @endphp
+                                <img src="{{ $student['photo'] ? Storage::url($student['photo']) : Storage::url($defaultPhoto) }}"
+                                    alt="Student Photo" class="w-12 h-12 rounded-full">
+                                <h1 class="ml-4 text-lg">
+                                    {{ $student['name'] }}
+                                </h1>
+                            </div>
+                            <h1 class="font-semibold">
+                                {{ $student['total'] . ' Violations' }}
                             </h1>
-                        </div>
-                        <h1 class="font-semibold">
-                            {{ $student['total'] . ' Violations' }}
-                        </h1>
-                    </li>
-                @endforeach
+                        </li>
+                    @endforeach
+                @else
+                    <x-empty-table class="h-full" />
+                @endif
             </ul>
         </div>
 
 
         <!-- Top 5 Guru Pelapor -->
-        <div class="col-span-1 max-[1400px]:col-span-2 max-[900px]:col-span-3 bg-white p-4 shadow rounded-lg">
-            <h2 class="text-xl font-semibold mb-4">Top 5 Guru Pelapor</h2>
-            <ul class="space-y-2">
-                @foreach ($topReportingTeachers as $index => $teacher)
-                    <li class="flex justify-between items-center bg-white border-b-2 p-2">
-                        <div class="flex items-center">
-                            <h1 class="text-xl font-bold mr-4">{{ $index + 1 }}</h1>
-                            <img src="{{ Storage::url($teacher['photo']) }}" alt="Teacher Photo"
-                                class="w-12 h-12 rounded-full">
-                            <h1 class="ml-4 text-lg">
-                                {{ $teacher['name'] }}
-                            </h1>
-                        </div>
-                        <h1 class="font-semibold">
-                            {{ $teacher['total'] . ' Reports' }}
-                        </h1>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
+        @if (Auth::user()->role === 'admin')
+            <div class="col-span-1 max-[1400px]:col-span-2 max-[900px]:col-span-3 bg-white p-4 shadow rounded-lg">
+                <h2 class="text-xl font-semibold mb-4">Top 5 Guru Pelapor</h2>
+                <ul class="space-y-2">
+                    @if ($topReportingTeachers)
+                        @foreach ($topReportingTeachers as $index => $teacher)
+                            <li class="flex justify-between items-center bg-white border-b-2 p-2">
+                                <div class="flex items-center">
+                                    <h1 class="text-xl font-bold mr-4">{{ $index + 1 }}</h1>
+                                    <img src="{{ Storage::url($teacher['photo']) }}" alt="Teacher Photo"
+                                        class="w-12 h-12 rounded-full">
+                                    <h1 class="ml-4 text-lg">
+                                        {{ $teacher['name'] }}
+                                    </h1>
+                                </div>
+                                <h1 class="font-semibold">
+                                    {{ $teacher['total'] . ' Reports' }}
+                                </h1>
+                            </li>
+                        @endforeach
+                    @else
+                        <x-empty-table class="h-full" />
+                    @endif
+                </ul>
+            </div>
+        @endif
 
         <!-- Newest Violations -->
         <div class="col-span-1 max-[900px]:col-span-3 bg-white p-6 shadow rounded-lg">
             <h2 class="text-xl font-semibold mb-4">Newest Violations</h2>
             <ul
                 class="space-y-4 h-96 overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
-                @foreach ($newestViolations as $index => $nw)
-                    <li class="flex justify-between items-center bg-blue-100 border border-blue-500 rounded-md p-2">
-                        <div class="flex flex-col">
-                            <h1 class="text-base">
-                                {{ $nw['student']['name'] }}
-                            </h1>
-                            <p class="text-sm text-gray-600">
-                                {{ $nw['violation_category']['name'] }}
+                @if ($newestViolations)
+                    @foreach ($newestViolations as $index => $nw)
+                        <li class="flex justify-between items-center bg-blue-100 border border-blue-500 rounded-md p-2">
+                            <div class="flex flex-col">
+                                <h1 class="text-base">
+                                    {{ $nw['student']['name'] }}
+                                </h1>
+                                <p class="text-sm text-gray-600">
+                                    {{ $nw['violation_category']['name'] }}
+                                </p>
+                            </div>
+                            <p class="text-base text-gray-600">
+                                {{ \Carbon\Carbon::parse($nw['created_at'])->diffForHumans() }}
                             </p>
-                        </div>
-                        <p class="text-base text-gray-600">
-                            {{ \Carbon\Carbon::parse($nw['created_at'])->diffForHumans() }}
-                        </p>
-                        {{-- <h1 class="font-semibold">
-                        {{ \Carbon\Carbon::parse($nw['created_at'])->diffForHumans() }}
-                    </h1> --}}
-                    </li>
-                @endforeach
+                            {{-- <h1 class="font-semibold">
+                    {{ \Carbon\Carbon::parse($nw['created_at'])->diffForHumans() }}
+                </h1> --}}
+                        </li>
+                    @endforeach
+                @else
+                    <x-empty-table class="h-full" />
+                @endif
             </ul>
         </div>
 

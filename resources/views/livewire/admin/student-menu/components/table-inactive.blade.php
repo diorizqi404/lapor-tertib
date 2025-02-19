@@ -30,19 +30,21 @@ $classBox = 'my-4 bg-white border border-gray-200 rounded-xl shadow-sm overflow-
         </div>
         <!-- End Dropdown Menu -->
 
-        <!-- Action Button -->
-        <div class="flex justify-start items-center space-x-2 max-[800px]:mt-2">
-            <!-- Delete -->
-            <x-danger-button wire:click="deleteAllInactive()" :disabled="$inactiveStudents->isEmpty()">
-                Delete all student
-            </x-danger-button>
-            <!-- End Delete -->
+        @if (Auth::user()->role === 'admin')
+            <!-- Action Button -->
+            <div class="flex justify-start items-center space-x-2 max-[800px]:mt-2">
+                <!-- Delete -->
+                <x-danger-button wire:click="deleteAllInactive()" :disabled="$inactiveStudents->isEmpty()">
+                    Delete all student
+                </x-danger-button>
+                <!-- End Delete -->
 
-            @if ($isModalImportOpen)
-                @include('livewire.admin.student-menu.components.import-excel')
-            @endif
-        </div>
-        <!-- Action Button -->
+                @if ($isModalImportOpen)
+                    @include('livewire.admin.student-menu.components.import-excel')
+                @endif
+            </div>
+            <!-- Action Button -->
+        @endif
     </div>
     <!-- End Header -->
 
@@ -50,7 +52,7 @@ $classBox = 'my-4 bg-white border border-gray-200 rounded-xl shadow-sm overflow-
     <div class="-m-1.5 overflow-x-auto">
         <div class="p-1.5 w-full inline-block align-middle">
             @if (count($inactiveStudents) === 0)
-                <x-empty-table />
+                <x-empty-table class="h-full" />
             @else
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                     <thead class="bg-gray-50 dark:bg-neutral-800">

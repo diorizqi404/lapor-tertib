@@ -13,11 +13,13 @@
                 </div>
             </div>
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="w-full">
-                    <livewire:profile.set-template-message-form />
+            @if (Auth::user()->role === 'admin')
+                <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                    <div class="w-full">
+                        <livewire:profile.set-template-message-form />
+                    </div>
                 </div>
-            </div>
+            @endif
 
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="max-w-xl">

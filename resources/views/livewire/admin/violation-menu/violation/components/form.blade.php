@@ -24,6 +24,9 @@
                 <div class="grid gap-y-4">
                     <!-- Form Group -->
                     @livewire('student-select')
+                    @error('selectedStudent.id')
+                        <x-input-error messages="{{ $message }}" />
+                    @enderror
                     {{-- @if ($selectedStudent)
                         <h1>{{ $selectedStudent['id'] }}</h1>
                     @endif --}}

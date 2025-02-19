@@ -7,6 +7,8 @@ use App\Livewire\Admin\ViolationCategory;
 use App\Livewire\Admin\Violations;
 use App\Livewire\Admin\Dashboard as DashboardAdmin;
 use App\Livewire\Admin\Punishment;
+use App\Livewire\Student\SearchStudent;
+use App\Livewire\Student\StudentInfo;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
@@ -34,8 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard/violations', Violations::class)->name('admin.violations');
 });
 
-//halaman dashboard untuk teacher
-Route::middleware([\App\Http\Middleware\Teacher::class])->group(function () {
-    Route::view('/teacher', 'livewire.teacher.dashboard')
-        ->name('teacher');
-});
+
+
+    Route::get('/student/search', SearchStudent::class)->name('student.search');
+    Route::get('/student/info/{student}/{token}', StudentInfo::class)->name('student.info')->middleware('signed');

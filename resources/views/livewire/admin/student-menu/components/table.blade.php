@@ -42,140 +42,150 @@
 
             <!-- Dropdown Menu -->
             <div class="flex justify-start items-center space-x-2 max-[800px]:mt-2">
-                <div class="hs-dropdown relative inline-flex">
-                    <button id="hs-dropdown-with-icons" type="button"
-                        class="hs-dropdown-toggle py-2.5 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                        aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
-                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24"
-                            viewBox="0 0 48 48">
-                            <path fill="#169154" d="M29,6H15.744C14.781,6,14,6.781,14,7.744v7.259h15V6z">
-                            </path>
-                            <path fill="#18482a" d="M14,33.054v7.202C14,41.219,14.781,42,15.743,42H29v-8.946H14z">
-                            </path>
-                            <path fill="#0c8045" d="M14 15.003H29V24.005000000000003H14z"></path>
-                            <path fill="#17472a" d="M14 24.005H29V33.055H14z"></path>
-                            <g>
-                                <path fill="#29c27f" d="M42.256,6H29v9.003h15V7.744C44,6.781,43.219,6,42.256,6z">
-                                </path>
-                                <path fill="#27663f" d="M29,33.054V42h13.257C43.219,42,44,41.219,44,40.257v-7.202H29z">
-                                </path>
-                                <path fill="#19ac65" d="M29 15.003H44V24.005000000000003H29z"></path>
-                                <path fill="#129652" d="M29 24.005H44V33.055H29z"></path>
-                            </g>
-                            <path fill="#0c7238"
-                                d="M22.319,34H5.681C4.753,34,4,33.247,4,32.319V15.681C4,14.753,4.753,14,5.681,14h16.638 C23.247,14,24,14.753,24,15.681v16.638C24,33.247,23.247,34,22.319,34z">
-                            </path>
-                            <path fill="#fff"
-                                d="M9.807 19L12.193 19 14.129 22.754 16.175 19 18.404 19 15.333 24 18.474 29 16.123 29 14.013 25.07 11.912 29 9.526 29 12.719 23.982z">
-                            </path>
-                        </svg>
-                        Actions
-                        <svg class="hs-dropdown-open:rotate-180 size-4" xmlns="http://www.w3.org/2000/svg"
-                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m6 9 6 6 6-6" />
-                        </svg>
-                    </button>
 
-                    <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-36 bg-white shadow-md rounded-lg mt-2 divide-y divide-gray-200 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700"
-                        role="menu" aria-orientation="vertical" aria-labelledby="hs-dropdown-with-icons">
-                        <div class="p-1 space-y-0.5">
-                            <a class="flex items-center cursor-pointer gap-x-3.5 py-2 px-3 rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
-                                wire:click="import()">
-                                <x-heroicon-m-arrow-up-tray class="w-6 h-6" />
-                                Import
-                            </a>
-                            <a class="flex items-center cursor-pointer gap-x-3.5 py-2 px-3 rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
-                                wire:click="import()">
-                                <x-heroicon-m-arrow-down-tray class="w-6 h-6" />
-                                Export
-                            </a>
+                @if (Auth::user()->role === 'admin')
+                    <div class="hs-dropdown relative inline-flex">
+                        <button id="hs-dropdown-with-icons" type="button"
+                            class="hs-dropdown-toggle py-2.5 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                            aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24"
+                                viewBox="0 0 48 48">
+                                <path fill="#169154" d="M29,6H15.744C14.781,6,14,6.781,14,7.744v7.259h15V6z">
+                                </path>
+                                <path fill="#18482a" d="M14,33.054v7.202C14,41.219,14.781,42,15.743,42H29v-8.946H14z">
+                                </path>
+                                <path fill="#0c8045" d="M14 15.003H29V24.005000000000003H14z"></path>
+                                <path fill="#17472a" d="M14 24.005H29V33.055H14z"></path>
+                                <g>
+                                    <path fill="#29c27f" d="M42.256,6H29v9.003h15V7.744C44,6.781,43.219,6,42.256,6z">
+                                    </path>
+                                    <path fill="#27663f"
+                                        d="M29,33.054V42h13.257C43.219,42,44,41.219,44,40.257v-7.202H29z">
+                                    </path>
+                                    <path fill="#19ac65" d="M29 15.003H44V24.005000000000003H29z"></path>
+                                    <path fill="#129652" d="M29 24.005H44V33.055H29z"></path>
+                                </g>
+                                <path fill="#0c7238"
+                                    d="M22.319,34H5.681C4.753,34,4,33.247,4,32.319V15.681C4,14.753,4.753,14,5.681,14h16.638 C23.247,14,24,14.753,24,15.681v16.638C24,33.247,23.247,34,22.319,34z">
+                                </path>
+                                <path fill="#fff"
+                                    d="M9.807 19L12.193 19 14.129 22.754 16.175 19 18.404 19 15.333 24 18.474 29 16.123 29 14.013 25.07 11.912 29 9.526 29 12.719 23.982z">
+                                </path>
+                            </svg>
+                            Actions
+                            <svg class="hs-dropdown-open:rotate-180 size-4" xmlns="http://www.w3.org/2000/svg"
+                                width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m6 9 6 6 6-6" />
+                            </svg>
+                        </button>
+
+                        <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-36 bg-white shadow-md rounded-lg mt-2 divide-y divide-gray-200 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700"
+                            role="menu" aria-orientation="vertical" aria-labelledby="hs-dropdown-with-icons">
+                            <div class="p-1 space-y-0.5">
+                                <a class="flex items-center cursor-pointer gap-x-3.5 py-2 px-3 rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
+                                    wire:click="import()">
+                                    <x-heroicon-m-arrow-up-tray class="w-6 h-6" />
+                                    Import
+                                </a>
+                                <a class="flex items-center cursor-pointer gap-x-3.5 py-2 px-3 rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
+                                    wire:click="import()">
+                                    <x-heroicon-m-arrow-down-tray class="w-6 h-6" />
+                                    Export
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
 
                 <x-select wire:model.live="perPage"></x-select>
             </div>
             <!-- End Dropdown Menu -->
 
-            <!-- Action Button -->
-            <div class="flex justify-start items-center space-x-2 max-[800px]:mt-2">
-                <!-- Delete -->
-                @php
-                    $tooltip = empty($selected_id) ? 'true' : 'false';
-                @endphp
-                <x-danger-button wire:click="delete()" withTooltip="{{ $tooltip }}">
-                    Delete ({{ count($selected_id) }})
-                </x-danger-button>
-                <!-- End Delete -->
+            @if (Auth::user()->role === 'admin')
+                <!-- Action Button -->
+                <div class="flex justify-start items-center space-x-2 max-[800px]:mt-2">
+                    <!-- Delete -->
+                    @php
+                        $tooltip = empty($selected_id) ? 'true' : 'false';
+                    @endphp
+                    <x-danger-button wire:click="delete()" withTooltip="{{ $tooltip }}">
+                        Delete ({{ count($selected_id) }})
+                    </x-danger-button>
+                    <!-- End Delete -->
 
-                <x-primary-button withIcon="true" type="button" wire:click="create()">
-                    Add Student
-                </x-primary-button>
+                    <x-primary-button withIcon="true" type="button" wire:click="create()">
+                        Add Student
+                    </x-primary-button>
 
-                <x-primary-button aria-haspopup="dialog" aria-expanded="false" data-hs-overlay="#hs-basic-modal-sync"
-                    class="h-12 bg-blue-500 hover:bg-blue-600 focus:bg-blue-600">
-                    <x-heroicon-o-arrow-path class="w-5 h-5 mr-2" />
-                    Sync Academic Year
-                    <x-icon-loading wire:loading wire:target="syncYear" />
-                </x-primary-button>
+                    <x-primary-button aria-haspopup="dialog" aria-expanded="false"
+                        data-hs-overlay="#hs-basic-modal-sync"
+                        class="h-12 bg-blue-500 hover:bg-blue-600 focus:bg-blue-600">
+                        <x-heroicon-o-arrow-path class="w-5 h-5 mr-2" />
+                        Sync Academic Year
+                        <x-icon-loading wire:loading wire:target="syncYear" />
+                    </x-primary-button>
 
-                <div id="hs-basic-modal-sync"
-                    class="hs-overlay hs-overlay-open:opacity-100 hs-overlay-open:duration-500 size-full fixed top-16 start-0 z-[80] opacity-0 overflow-x-hidden transition-all overflow-y-auto pointer-events-none"
-                    role="dialog" tabindex="-1" aria-labelledby="hs-basic-modal-label">
-                    <div class="sm:max-w-lg sm:w-full m-3 sm:mx-auto">
-                        <div
-                            class="flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70 relative">
-                            <button type="button"
-                                class="absolute top-4 right-4 z-10 size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:text-neutral-400 dark:focus:bg-neutral-600"
-                                aria-label="Close" data-hs-overlay="#hs-basic-modal-sync">
-                                <span class="sr-only">Close</span>
-                                <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
-                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M18 6 6 18"></path>
-                                    <path d="m6 6 12 12"></path>
-                                </svg>
-                            </button>
-                            <div class="p-4 my-4 flex flex-col justify-center items-center">
-                                <div class="p-4 bg-yellow-100 rounded-full">
-                                    <x-heroicon-o-exclamation-triangle class="w-16 h-16 text-yellow-500" />
-                                </div>
-                                <h1 class="text-lg text-yellow-500 font-semibold mt-4">
-                                    Apakah Anda yakin ingin melakukan sinkronisasi?
-                                </h1>
-                                <p class="text-gray-500 mt-2 text-sm text-center">
-                                    Sinkronisasi akan memperbarui tahun ajaran berdasarkan tingkatan. Siswa yang berada
-                                    di tingkatan tertinggi statusnya tidak aktif dan dianggap lulus. Pastikan Anda telah
-                                    menyelesaikan pembuatan struktur akademik sebelum melakukan sinkronisasi.
-                                </p>
-                            </div>
+                    <div id="hs-basic-modal-sync"
+                        class="hs-overlay hs-overlay-open:opacity-100 hs-overlay-open:duration-500 size-full fixed top-16 start-0 z-[80] opacity-0 overflow-x-hidden transition-all overflow-y-auto pointer-events-none"
+                        role="dialog" tabindex="-1" aria-labelledby="hs-basic-modal-label">
+                        <div class="sm:max-w-lg sm:w-full m-3 sm:mx-auto">
                             <div
-                                class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
+                                class="flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70 relative">
                                 <button type="button"
-                                    class="py-3 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                                    data-hs-overlay="#hs-basic-modal-sync">
-                                    Batal
+                                    class="absolute top-4 right-4 z-10 size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:text-neutral-400 dark:focus:bg-neutral-600"
+                                    aria-label="Close" data-hs-overlay="#hs-basic-modal-sync">
+                                    <span class="sr-only">Close</span>
+                                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M18 6 6 18"></path>
+                                        <path d="m6 6 12 12"></path>
+                                    </svg>
                                 </button>
-                                <x-primary-button wire:click.debounce.400ms="syncYear()"
-                                    data-hs-overlay="#hs-basic-modal-sync"
-                                    class="bg-blue-500 hover:bg-blue-600 focus:bg-blue-600">
-                                    Saya Yakin
-                                </x-primary-button>
+                                <div class="p-4 my-4 flex flex-col justify-center items-center">
+                                    <div class="p-4 bg-yellow-100 rounded-full">
+                                        <x-heroicon-o-exclamation-triangle class="w-16 h-16 text-yellow-500" />
+                                    </div>
+                                    <h1 class="text-lg text-yellow-500 font-semibold mt-4">
+                                        Apakah Anda yakin ingin melakukan sinkronisasi?
+                                    </h1>
+                                    <p class="text-gray-500 mt-2 text-sm text-center">
+                                        Sinkronisasi akan memperbarui tahun ajaran berdasarkan tingkatan. Siswa yang
+                                        berada
+                                        di tingkatan tertinggi statusnya tidak aktif dan dianggap lulus. Pastikan Anda
+                                        telah
+                                        menyelesaikan pembuatan struktur akademik sebelum melakukan sinkronisasi.
+                                    </p>
+                                </div>
+                                <div
+                                    class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
+                                    <button type="button"
+                                        class="py-3 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                                        data-hs-overlay="#hs-basic-modal-sync">
+                                        Batal
+                                    </button>
+                                    <x-primary-button wire:click.debounce.400ms="syncYear()"
+                                        data-hs-overlay="#hs-basic-modal-sync"
+                                        class="bg-blue-500 hover:bg-blue-600 focus:bg-blue-600">
+                                        Saya Yakin
+                                    </x-primary-button>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    @if ($isModalOpen)
+                        @include('livewire.admin.student-menu.components.form')
+                    @endif
+
+                    @if ($isModalImportOpen)
+                        @include('livewire.admin.student-menu.components.import-excel')
+                    @endif
                 </div>
+                <!-- Action Button -->
 
-                @if ($isModalOpen)
-                    @include('livewire.admin.student-menu.components.form')
-                @endif
-
-                @if ($isModalImportOpen)
-                    @include('livewire.admin.student-menu.components.import-excel')
-                @endif
-            </div>
-            <!-- Action Button -->
+            @endif
         </div>
         <!-- End Header -->
 
@@ -183,7 +193,7 @@
         <div class="-m-1.5 overflow-x-auto">
             <div class="p-1.5 w-full inline-block align-middle">
                 @if (count($activeStudents) === 0)
-                    <x-empty-table />
+                    <x-empty-table class="h-full" />
                 @else
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                         <thead class="bg-gray-50 dark:bg-neutral-800">

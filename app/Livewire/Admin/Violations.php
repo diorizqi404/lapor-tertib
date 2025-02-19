@@ -12,6 +12,7 @@ use App\Models\Setting;
 use App\Models\ViolationCategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Livewire\Attributes\On;
 
 class Violations extends Component
 {
@@ -57,15 +58,15 @@ class Violations extends Component
         ]);
     }
 
-    public function selectCategory($categoryId)
-    {
-        $this->selectedCategory = ViolationCategory::where('school_id', $this->school_id)
-            ->findOrFail($categoryId);
+    // public function selectCategory($categoryId)
+    // {
+    //     $this->selectedCategory = ViolationCategory::where('school_id', $this->school_id)
+    //         ->findOrFail($categoryId);
 
 
-        // Reset pencarian setelah memilih
-        $this->searchCategory = '';
-    }
+    //     // Reset pencarian setelah memilih
+    //     $this->searchCategory = '';
+    // }
 
 
     public function openModal()
@@ -95,6 +96,7 @@ class Violations extends Component
     public function rules()
     {
         return [
+            'selectedStudent.id' => 'required',
             'violation_category_id' => 'required',
             'datetime' => 'required',
             'description' => 'required',
@@ -169,9 +171,12 @@ class Violations extends Component
 
         $this->sendWa($notelp, $message);
 
+        $this->dispatch('pelanggaran-created');
         flash()->success('Violation saved successfully');
         $this->closeModal();
         $this->resetInputFields();
+
+        
     }
 
     public function sendWa($notelp, $message)
@@ -193,5 +198,23 @@ class Violations extends Component
         } else {
             flash()->error('Failed to send WhatsApp message: ' . $response->body());
         }
+    }
+
+    public function delete()
+    {
+        if (count($this->selected_id) == 0) {
+            flash()->error('Please select at least one violation');
+            return;
+        }
+
+        DB::transaction(function () {
+            Violation::where('school_id', $this->school_id)
+            ->whereIn('id', $this->selected_id)
+            ->lockForUpdate()
+            ->delete();
+        });
+
+        flash()->success('Violation deleted successfully');
+        $this->selected_id = [];
     }
 }

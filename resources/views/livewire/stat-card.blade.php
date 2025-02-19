@@ -1,5 +1,5 @@
        <!-- Card -->
-       <div class=" flex flex-col bg-blue-100 border-blue-300 border shadow-sm rounded-xl">
+       <div class="w-full flex flex-col bg-blue-100 border-blue-300 border shadow-sm rounded-xl">
            <div class="p-4 md:p-5 flex gap-x-4">
                <div class="shrink-0 flex justify-center items-center size-14 bg-gray-100 rounded-lg dark:bg-neutral-800">
                    {{-- <svg class="shrink-0 size-8 text-blue-500 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg"

@@ -5,7 +5,7 @@
         @include('livewire.admin.violation-menu.violation.components.table')
         <!-- End Table -->
 
-        
+
 
         {{-- @if (!empty($selectedStudent))
             {{ $selectedStudent['id'] }}

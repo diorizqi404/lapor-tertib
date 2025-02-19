@@ -26,8 +26,6 @@ new #[Layout('layouts.guest')] class extends Component {
         if ($user) {
             if ($user->hasRole('superadmin')) {
                 return \Illuminate\Support\Facades\Redirect::route('superadmin');
-            } elseif ($user->hasRole('teacher')) {
-                return \Illuminate\Support\Facades\Redirect::route('teacher');
             } else {
                 return \Illuminate\Support\Facades\Redirect::route('admin.dashboard');
             }

@@ -77,6 +77,8 @@
                         href="#features" aria-current="page">Features</a>
                     <a class="p-3 ps-px sm:px-3 md:py-4 text-sm hover:text-blue-400 focus:outline-none focus:text-blue-400"
                         href="#howto">How To?</a>
+                    <a class="p-3 ps-px sm:px-3 md:py-4 text-sm hover:text-blue-400 focus:outline-none focus:text-blue-400"
+                        href="{{ route('student.search') }}">Cari Siswa</a>
 
                     @if (Route::has('login'))
                         <livewire:welcome.navigation />
