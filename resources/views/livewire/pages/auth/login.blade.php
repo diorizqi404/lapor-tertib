@@ -25,7 +25,7 @@ new #[Layout('layouts.guest')] class extends Component {
         $user = Auth::user();
         if ($user) {
             if ($user->hasRole('superadmin')) {
-                return \Illuminate\Support\Facades\Redirect::route('superadmin');
+                return \Illuminate\Support\Facades\Redirect::route('superadmin.dashboard');
             } else {
                 return \Illuminate\Support\Facades\Redirect::route('admin.dashboard');
             }

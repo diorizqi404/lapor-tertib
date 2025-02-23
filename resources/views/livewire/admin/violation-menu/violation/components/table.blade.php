@@ -24,7 +24,8 @@ $classBox = 'my-8  bg-white border border-gray-200 rounded-xl shadow-sm overflow
 
         <!-- Dropdown Menu -->
         <div class="flex justify-start items-center space-x-2 max-[800px]:mt-2">
-            <div class="hs-dropdown relative inline-flex">
+
+            {{-- <div class="hs-dropdown relative inline-flex">
                 <button id="hs-dropdown-with-icons" type="button"
                     class="hs-dropdown-toggle py-2.5 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                     aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
@@ -63,20 +64,17 @@ $classBox = 'my-8  bg-white border border-gray-200 rounded-xl shadow-sm overflow
                     role="menu" aria-orientation="vertical" aria-labelledby="hs-dropdown-with-icons">
                     <div class="p-1 space-y-0.5">
                         <a class="flex items-center cursor-pointer gap-x-3.5 py-2 px-3 rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
-                            wire:click="import()">
-                            <x-heroicon-m-arrow-up-tray class="w-6 h-6" />
-                            Import
-                        </a>
-                        <a class="flex items-center cursor-pointer gap-x-3.5 py-2 px-3 rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
-                            wire:click="import()">
+                            wire:click="exportExcel()">
                             <x-heroicon-m-arrow-down-tray class="w-6 h-6" />
                             Export
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <x-select wire:model.live="perPage"></x-select>
+
+            <livewire:date-selector />
         </div>
         <!-- End Dropdown Menu -->
 
@@ -90,6 +88,13 @@ $classBox = 'my-8  bg-white border border-gray-200 rounded-xl shadow-sm overflow
                 Delete ({{ count($selected_id) }})
             </x-danger-button>
             <!-- End Delete -->
+
+            <button wire:click.prevent="resetPoint()"
+                class="hs-tooltip-toggle py-3 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-red-500 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800">
+                <x-heroicon-o-arrow-path class="w-5 h-5 mr-2" />
+                Reset Point
+                <x-icon-loading wire:loading wire:target="resetPoint()" class="text-black" />
+            </button>
 
             <x-primary-button withIcon="true" type="button" wire:click="create()">
                 Violation
@@ -206,7 +211,7 @@ $classBox = 'my-8  bg-white border border-gray-200 rounded-xl shadow-sm overflow
                                             <span
                                                 class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ $v->ViolationCategory->name }}</span>
                                             <span
-                                                class="block text-sm text-gray-500 dark:text-neutral-500">{{ $v->ViolationCategory->point }}</span>
+                                                class="block text-sm text-gray-500 dark:text-neutral-500">{{ $v->point }}</span>
                                         </div>
                                     </div>
                                 </td>
@@ -231,7 +236,7 @@ $classBox = 'my-8  bg-white border border-gray-200 rounded-xl shadow-sm overflow
                                                 class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                                                 aria-haspopup="dialog" aria-expanded="false"
                                                 data-hs-overlay="#hs-basic-modal-photo-{{ $v->id }}">
-                                                Open modal
+                                                View Photo
                                             </button>
                                         </span>
                                     </div>
@@ -297,39 +302,14 @@ $classBox = 'my-8  bg-white border border-gray-200 rounded-xl shadow-sm overflow
     <div
         class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
         {{ $violations->links() }}
-
-        {{--                            <div> --}}
-        {{--                                <p class="text-sm text-gray-600 dark:text-neutral-400"> --}}
-        {{--                                    <span class="font-semibold text-gray-800 dark:text-neutral-200">12</span> results --}}
-        {{--                                </p> --}}
-        {{--                            </div> --}}
-
-        {{--                            <div> --}}
-        {{--                                <div class="inline-flex gap-x-2"> --}}
-        {{--                                    <button type="button" --}}
-        {{--                                            class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"> --}}
-        {{--                                        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" --}}
-        {{--                                             height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" --}}
-        {{--                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> --}}
-        {{--                                            <path d="m15 18-6-6 6-6"/> --}}
-        {{--                                        </svg> --}}
-        {{--                                        Prev --}}
-        {{--                                    </button> --}}
-
-        {{--                                    <button type="button" --}}
-        {{--                                            class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"> --}}
-        {{--                                        Next --}}
-        {{--                                        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" --}}
-        {{--                                             height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" --}}
-        {{--                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> --}}
-        {{--                                            <path d="m9 18 6-6-6-6"/> --}}
-        {{--                                        </svg> --}}
-        {{--                                    </button> --}}
-        {{--                                </div> --}}
-        {{--                            </div> --}}
     </div>
     <!-- End Footer -->
     <script>
+        document.getElementById('dateTypeSelector').addEventListener('change', function() {
+            var dateInput = document.getElementById('dateInput');
+            dateInput.type = this.value;
+        });
+
         function initPreline() {
             if (typeof HSOverlay !== 'undefined') {
                 HSOverlay.close('.hs-overlay');

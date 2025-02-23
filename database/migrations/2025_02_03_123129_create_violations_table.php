@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('violations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id')->constrained()->onDelete('cascade');
-            $table->foreignId('teacher_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('teacher_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
-            $table->foreignId('violation_category_id')->constrained('violation_categories')->onDelete('cascade');
+            $table->foreignId('violation_category_id')->nullable()->constrained('violation_categories')->nullOnDelete();
+            $table->string('teacher_name');
+            $table->string('violation_category_name');
             $table->datetime('datetime');
             $table->text('description');
             $table->integer('point');

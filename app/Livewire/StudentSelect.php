@@ -16,6 +16,9 @@ class StudentSelect extends Component
     {
         // Cari siswa berdasarkan nama atau kriteria lain dengan eager loading relasi
         $this->students = Student::where('school_id', Auth::user()->school_id)
+            ->whereHas('academicYear', function ($query) {
+                $query->where('status', 'active');
+            })
             ->with('class.grade', 'class.department')
             ->where('name', 'like', '%' . $this->search . '%')
             ->orWhere('nis', 'like', '%' . $this->search . '%')
@@ -27,9 +30,9 @@ class StudentSelect extends Component
     {
         $this->selectedStudent = Student::with(['class.grade', 'class.department'])
             ->findOrFail($studentId);
-        
+
         $this->dispatch('student-selected', student: $this->selectedStudent->toArray());
-        
+
         // Reset pencarian setelah memilih
         $this->search = '';
         $this->students = [];

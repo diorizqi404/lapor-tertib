@@ -5,6 +5,7 @@ namespace App\Exports;
 use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Illuminate\Support\Facades\Auth;
 
 class TeachersExport implements FromCollection, WithHeadings
 {
@@ -14,7 +15,7 @@ class TeachersExport implements FromCollection, WithHeadings
     public function collection()
     {
         return User::where('role', 'teacher')
-            ->where('school_id', auth()->user()->school_id)
+            ->where('school_id', Auth::user()->school_id)
             ->select('name', 'email', 'phone', 'gender')
             ->get();
     }

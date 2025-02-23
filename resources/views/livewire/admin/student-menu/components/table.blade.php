@@ -43,8 +43,8 @@
             <!-- Dropdown Menu -->
             <div class="flex justify-start items-center space-x-2 max-[800px]:mt-2">
 
-                @if (Auth::user()->role === 'admin')
-                    <div class="hs-dropdown relative inline-flex">
+       
+                    {{-- <div class="hs-dropdown relative inline-flex">
                         <button id="hs-dropdown-with-icons" type="button"
                             class="hs-dropdown-toggle py-2.5 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                             aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
@@ -95,10 +95,10 @@
                                 </a>
                             </div>
                         </div>
-                    </div>
-                @endif
+                    </div> --}}
+       
 
-                <x-select wire:model.live="perPage"></x-select>
+                {{-- <x-select wire:model.live="perPage"></x-select> --}}
             </div>
             <!-- End Dropdown Menu -->
 
@@ -118,13 +118,23 @@
                         Add Student
                     </x-primary-button>
 
-                    <x-primary-button aria-haspopup="dialog" aria-expanded="false"
-                        data-hs-overlay="#hs-basic-modal-sync"
-                        class="h-12 bg-blue-500 hover:bg-blue-600 focus:bg-blue-600">
-                        <x-heroicon-o-arrow-path class="w-5 h-5 mr-2" />
-                        Sync Academic Year
-                        <x-icon-loading wire:loading wire:target="syncYear" />
-                    </x-primary-button>
+                    @if (count($activeStudents) === 0)
+                        <x-primary-button aria-haspopup="dialog" aria-expanded="false"
+                            data-hs-overlay="#hs-basic-modal-sync"
+                            class="h-12 bg-blue-500 hover:bg-blue-600 focus:bg-blue-600" disabled>
+                            <x-heroicon-o-arrow-path class="w-5 h-5 mr-2" />
+                            Sync Academic Year
+                            <x-icon-loading wire:loading wire:target="syncYear" />
+                        </x-primary-button>
+                    @else
+                        <x-primary-button aria-haspopup="dialog" aria-expanded="false"
+                            data-hs-overlay="#hs-basic-modal-sync"
+                            class="h-12 bg-blue-500 hover:bg-blue-600 focus:bg-blue-600">
+                            <x-heroicon-o-arrow-path class="w-5 h-5 mr-2" />
+                            Sync Academic Year
+                            <x-icon-loading wire:loading wire:target="syncYear" />
+                        </x-primary-button>
+                    @endif
 
                     <div id="hs-basic-modal-sync"
                         class="hs-overlay hs-overlay-open:opacity-100 hs-overlay-open:duration-500 size-full fixed top-16 start-0 z-[80] opacity-0 overflow-x-hidden transition-all overflow-y-auto pointer-events-none"
@@ -198,9 +208,11 @@
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                         <thead class="bg-gray-50 dark:bg-neutral-800">
                             <tr>
-                                <th scope="col" class="ps-6 py-3 text-start">
-                                    #
-                                </th>
+                                @if (Auth::user()->role === 'admin')
+                                    <th scope="col" class="ps-6 py-3 text-start">
+                                        #
+                                    </th>
+                                @endif
 
                                 <th scope="col" class="px-6 py-3 text-start">
                                     <div class="flex items-center gap-x-2">
@@ -265,31 +277,35 @@
                                     </div>
                                 </th>
 
-                                <th scope="col" class="px-6 py-3 text-start">
-                                    <div class="flex items-center gap-x-2">
-                                        <span
-                                            class="text-sm font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                            Action
-                                        </span>
-                                    </div>
-                                </th>
+                                @if (Auth::user()->role === 'admin')
+                                    <th scope="col" class="px-6 py-3 text-start">
+                                        <div class="flex items-center gap-x-2">
+                                            <span
+                                                class="text-sm font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                Action
+                                            </span>
+                                        </div>
+                                    </th>
+                                @endif
                             </tr>
                         </thead>
 
                         <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
                             @foreach ($activeStudents as $student)
                                 <tr>
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="ps-6 py-3">
-                                            <label for="hs-at-with-checkboxes-1" class="flex">
-                                                <input type="checkbox"
-                                                    class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                                                    id="hs-at-with-checkboxes-1" value="{{ $student->id }}"
-                                                    wire:key="{{ $student->id }}" wire:model.live="selected_id">
-                                                <span class="sr-only">Checkbox</span>
-                                            </label>
-                                        </div>
-                                    </td>
+                                    @if (Auth::user()->role === 'admin')
+                                        <td class="size-px whitespace-nowrap">
+                                            <div class="ps-6 py-3">
+                                                <label for="hs-at-with-checkboxes-1" class="flex">
+                                                    <input type="checkbox"
+                                                        class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                                                        id="hs-at-with-checkboxes-1" value="{{ $student->id }}"
+                                                        wire:key="{{ $student->id }}" wire:model.live="selected_id">
+                                                    <span class="sr-only">Checkbox</span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    @endif
 
                                     <td class="h-px w-24 whitespace-nowrap">
                                         <div class="px-6 py-3">
@@ -373,14 +389,16 @@
                                             </span>
                                         </div>
                                     </td>
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="px-6 py-1.5">
-                                            <button type="button" wire:click.prevent="edit({{ $student->id }})"
-                                                class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500">
-                                                Edit
-                                            </button>
-                                        </div>
-                                    </td>
+                                    @if (Auth::user()->role === 'admin')
+                                        <td class="size-px whitespace-nowrap">
+                                            <div class="px-6 py-1.5">
+                                                <button type="button" wire:click.prevent="edit({{ $student->id }})"
+                                                    class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500">
+                                                    Edit
+                                                </button>
+                                            </div>
+                                        </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>

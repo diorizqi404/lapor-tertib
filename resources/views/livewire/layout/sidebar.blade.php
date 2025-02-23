@@ -21,7 +21,7 @@
     <div class="relative flex flex-col h-full max-h-full">
         <div class="px-6 pt-4 flex items-center">
             <!-- Logo -->
-            <x-application-logo class="w-10 h-10 fill-current text-orange-500 font-bold" />
+            <x-application-logo class="w-auto h-8 fill-current text-orange-500 font-bold" />
             <!-- End Logo -->
 
             <div class="hidden xl:block ms-2">
@@ -35,7 +35,7 @@
                 <ul class="flex flex-col space-y-2">
 
                     @if (auth()->user()->role === 'admin')
-                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" wire:navigate>
+                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" wire:navigated>
                             <x-heroicon-o-home class="{{ $icon }}" />
                             Dashboard
                         </x-nav-link>
@@ -77,36 +77,48 @@
                     @endif
 
                     @if (auth()->user()->role === 'teacher')
-                    <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" wire:navigate>
-                        <x-heroicon-o-home class="{{ $icon }}" />
-                        Dashboard
-                    </x-nav-link>
+                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" wire:navigated>
+                            <x-heroicon-o-home class="{{ $icon }}" />
+                            Dashboard
+                        </x-nav-link>
 
-                    <x-nav-link :href="route('admin.student')" :active="request()->routeIs('admin.student')" wire:navigate>
-                        <x-heroicon-o-user-group class="{{ $icon }}" />
-                        Student
-                    </x-nav-link>
+                        <x-nav-link :href="route('admin.student')" :active="request()->routeIs('admin.student')" wire:navigate>
+                            <x-heroicon-o-user-group class="{{ $icon }}" />
+                            Student
+                        </x-nav-link>
 
-                    <x-nav-link :href="route('admin.violation-category')" :active="request()->routeIs('admin.violation-category')" wire:navigate>
-                        <x-heroicon-o-rectangle-stack class="{{ $icon }}" />
-                        Violation Category
-                    </x-nav-link>
+                        <x-nav-link :href="route('admin.violation-category')" :active="request()->routeIs('admin.violation-category')" wire:navigate>
+                            <x-heroicon-o-rectangle-stack class="{{ $icon }}" />
+                            Violation Category
+                        </x-nav-link>
 
-                    <x-nav-link :href="route('admin.punishment')" :active="request()->routeIs('admin.punishment')" wire:navigate>
-                        <x-heroicon-o-exclamation-circle class="{{ $icon }}" />
-                        Punishment
-                    </x-nav-link>
+                        <x-nav-link :href="route('admin.punishment')" :active="request()->routeIs('admin.punishment')" wire:navigate>
+                            <x-heroicon-o-exclamation-circle class="{{ $icon }}" />
+                            Punishment
+                        </x-nav-link>
 
-                    <x-nav-link :href="route('admin.violations')" :active="request()->routeIs('admin.violations')" wire:navigate>
-                        <x-heroicon-o-rectangle-stack class="{{ $icon }}" />
-                        Violation
-                    </x-nav-link>
+                        <x-nav-link :href="route('admin.violations')" :active="request()->routeIs('admin.violations')" wire:navigate>
+                            <x-heroicon-o-rectangle-stack class="{{ $icon }}" />
+                            Violation
+                        </x-nav-link>
 
-                    <x-nav-link :href="route('profile')" :active="request()->routeIs('profile')" wire:navigate>
-                        <x-heroicon-o-user-circle class="{{ $icon }}" />
-                        Profile
-                    </x-nav-link>
-                @endif
+                        <x-nav-link :href="route('profile')" :active="request()->routeIs('profile')" wire:navigate>
+                            <x-heroicon-o-user-circle class="{{ $icon }}" />
+                            Profile
+                        </x-nav-link>
+                    @endif
+
+                    @if (auth()->user()->role === 'superadmin')
+                        <x-nav-link :href="route('superadmin.dashboard')" :active="request()->routeIs('superadmin.dashboard')" wire:navigated>
+                            <x-heroicon-o-home class="{{ $icon }}" />
+                            Dashboard
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('profile')" :active="request()->routeIs('profile')" wire:navigate>
+                            <x-heroicon-o-user-circle class="{{ $icon }}" />
+                            Profile
+                        </x-nav-link>
+                    @endif
                 </ul>
             </nav>
         </div>

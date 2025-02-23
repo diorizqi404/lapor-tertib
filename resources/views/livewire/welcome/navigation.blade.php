@@ -38,7 +38,7 @@
         @if (Route::has('register'))
             <div>
                 <a class="group inline-flex items-center gap-x-2 py-2 px-3 border border-blue-400 transition duration-300 ease-in-out hover:bg-blue-400 hover:text-white font-medium text-sm text-blue-500 tracking-wider rounded-full focus:outline-none"
-                    href="">
+                    href="{{ route('register') }}">
                     Daftar Sekarang!
                 </a>
             </div>

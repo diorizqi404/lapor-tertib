@@ -12,4 +12,8 @@ class Setting extends Model
     {
         return $this->belongsTo(School::class);
     }
+
+    protected $casts = [
+        'message_template' => 'array',
+    ];
 }

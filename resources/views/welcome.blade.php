@@ -40,7 +40,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
                     <!-- Logo -->
-                    <x-application-logo class="w-10 h-10 fill-current text-orange-500 font-bold" />
+                    <x-application-logo class="w-auto h-8 fill-current text-orange-500 font-bold" />
                     <!-- End Logo -->
                     {{-- <h1>LaporTertib</h1> --}}
                 </div>
@@ -425,10 +425,10 @@
     <!-- ========== FOOTER ========== -->
     <footer class="relative overflow-hidden">
         <div class="relative z-10">
-            <div class="w-full max-w-5xl px-4 xl:px-0 py-10 lg:pt-16 mx-auto">
+            <div class="w-auto h-8 max-w-5xl px-4 xl:px-0 py-10 lg:pt-16 mx-auto">
                 <div class="inline-flex items-center">
                     <!-- Logo -->
-                    <x-application-logo class="w-10 h-10 fill-current text-orange-500 font-bold" />
+                    <x-application-logo class="w-full h-10 fill-current text-orange-500 font-bold" />
                     <!-- End Logo -->
 
                     <div class="border-s border-neutral-700 ps-5 ms-5">

@@ -31,4 +31,19 @@ class Violation extends Model
     {
         return $this->belongsTo(ViolationCategory::class);
     }
+
+    protected static function boot()
+{
+    parent::boot();
+
+    static::creating(function ($violation) {
+        $violation->teacher_name = $violation->teacher->name ?? 'Unknown';
+        $violation->violation_category_name = $violation->ViolationCategory->name ?? 'Unknown';
+    });
+
+    static::updating(function ($violation) {
+        $violation->teacher_name = $violation->teacher->name ?? 'Unknown';
+        $violation->violation_category_name = $violation->ViolationCategory->name ?? 'Unknown';
+    });
+}
 }

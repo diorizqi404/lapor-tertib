@@ -5,8 +5,10 @@ namespace App\Livewire\Admin;
 use App\Exports\TeachersExport;
 use App\Imports\TeachersImport;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Livewire\Component;
@@ -31,26 +33,26 @@ class Teacher extends Component
 
 	public function updatedPerPage()
 	{
-			$this->resetPage();
+		$this->resetPage();
 	}
 
 	public function render()
 	{
-			$query = User::where('role', 'teacher')
-					->where('school_id', Auth::user()->school_id);
+		$query = User::where('role', 'teacher')
+			->where('school_id', Auth::user()->school_id);
 
-			if ($this->keyword) {
-					$query->where(function ($q) {
-							$q->where('name', 'like', '%' . $this->keyword . '%')
-								->orWhere('email', 'like', '%' . $this->keyword . '%');
-					});
-			}
+		if ($this->keyword) {
+			$query->where(function ($q) {
+				$q->where('name', 'like', '%' . $this->keyword . '%')
+					->orWhere('email', 'like', '%' . $this->keyword . '%');
+			});
+		}
 
-			$teachers = $query->orderBy('created_at', 'desc')->paginate($this->perPage);
+		$teachers = $query->orderBy('created_at', 'desc')->paginate($this->perPage);
 
-			return view('livewire.admin.teacher-menu.page', [
-					'teachers' => $teachers,
-			]);
+		return view('livewire.admin.teacher-menu.page', [
+			'teachers' => $teachers,
+		]);
 	}
 
 	public function openModal()
@@ -105,10 +107,12 @@ class Teacher extends Component
 
 		$profilePhotoPath = $this->photo ? $this->photo->store('profile_photos', 'public') : null;
 
-		DB::transaction(function () use ($profilePhotoPath) {
+		DB::beginTransaction();
+
+		try {
 			$school_id = Auth::user()->school_id;
 
-			User::lockForUpdate()->create([
+			User::create([
 				'school_id' => $school_id,
 				'role' => 'teacher',
 				'name' => $this->name,
@@ -117,9 +121,16 @@ class Teacher extends Component
 				'phone' => $this->phone,
 				'gender' => $this->gender,
 				'photo' => $profilePhotoPath,
+				'email_verified_at' => now(),
 			]);
+
+			DB::commit();
 			flash()->success('Teacher created successfully.');
-		});
+		} catch (\Exception $e) {
+			DB::rollBack();
+			Log::error('Failed to create teacher: ' . $e->getMessage());
+			flash()->error('Failed to create teacher. Please try again.');
+		}
 
 		$this->closeModal();
 		$this->resetInputFields();
@@ -148,62 +159,81 @@ class Teacher extends Component
 
 	public function update()
 	{
-		$teacher2 = $this->teacher;
 		try {
+			// Validasi input sebelum transaksi
 			$this->validate();
+
+			// Simpan email lama & baru
 			$emailBefore = $this->teacher->email;
 			$emailAfter = $this->email;
 
+			// Cek apakah email berubah
 			$this->emailChange = $emailBefore !== $emailAfter;
 
+			// Simpan foto profil baru jika ada, jika tidak pakai foto lama
 			$profilePhotoPath = $this->photo
 				? $this->photo->store('profile_photos', 'public')
 				: $this->existingPhoto;
 
-
-			$dataWithEmail = [
-				'name' => $this->name,
-				'email' => $this->email,
-				'password' => bcrypt($this->password),
-				'phone' => $this->phone,
-				'gender' => $this->gender,
-				'photo' => $profilePhotoPath,
-			];
-
-			$dataWithoutEmail = [
-				'name' => $this->name,
-				'password' => bcrypt($this->password),
-				'phone' => $this->phone,
-				'gender' => $this->gender,
-				'photo' => $profilePhotoPath,
-			];
-
-			DB::transaction(function () use ($teacher2, $dataWithoutEmail, $dataWithEmail) {
-				DB::table('users')
-					->where('email', $this->email)
-					->where('id', '!=', $teacher2->id)
-					->lockForUpdate()
+			// Cek apakah email sudah digunakan oleh user lain (hindari duplikasi)
+			if ($this->emailChange) {
+				$emailExists = DB::table('users')
+					->where('email', $emailAfter)
+					->where('id', '!=', $this->teacher->id)
 					->exists();
 
-				if ($this->emailChange) {
-					$teacher2->update($dataWithEmail);
-				} else {
-					$teacher2->update($dataWithoutEmail);
+				if ($emailExists) {
+					flash()->error('Email already taken.');
+					return;
 				}
-			});
+			}
+
+			// Siapkan data update
+			$updateData = [
+				'name' => $this->name,
+				'phone' => $this->phone,
+				'gender' => $this->gender,
+				'photo' => $profilePhotoPath,
+			];
+
+			// Tambahkan email hanya jika berubah
+			if ($this->emailChange) {
+				$updateData['email'] = $emailAfter;
+			}
+
+			// Tambahkan password jika diisi
+			if (!empty($this->password)) {
+				$updateData['password'] = bcrypt($this->password);
+			}
+
+			// Eksekusi transaksi database
+			DB::beginTransaction();
+
+			$this->teacher->update($updateData);
+
+			DB::commit();
+
+			// Reset & tutup modal setelah sukses
 			$this->closeModal();
 			$this->resetInputFields();
 
 			flash()->success('Teacher updated successfully.');
-		} catch (\Illuminate\Validation\ValidationException $e) {
-			$errorMessages = '';
+		} catch (ValidationException $e) {
+			// Handle validation error
 			foreach ($e->errors() as $field => $messages) {
 				foreach ($messages as $message) {
-					$errorMessages .= $message . ' ';
 					$this->addError($field, $message);
 				}
 			}
-			flash()->error('Validation error! ' . trim($errorMessages));
+			flash()->error('Validation error! Please check your input.');
+		} catch (\Exception $e) {
+			// Rollback transaksi jika terjadi kesalahan
+			DB::rollBack();
+
+			// Logging error
+			Log::error('Failed to update teacher: ' . $e->getMessage());
+
+			flash()->error('Failed to update teacher. Please try again.');
 		}
 	}
 
@@ -230,7 +260,7 @@ class Teacher extends Component
 
 
 
-	//          EXCEL
+	// EXCEL
 	public function import()
 	{
 		$this->isModalImportOpen = true;

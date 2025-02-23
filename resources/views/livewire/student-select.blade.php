@@ -14,7 +14,7 @@
     </div>
 
     @if (!empty($students) && $search)
-        <ul x-show="open" x-on:click.away="open = false"
+        <ul x-show="open" x-on:click.away="open = true"
             class="absolute z-10 w-full bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
             @foreach ($students as $student)
                 <li wire:click="selectStudent({{ $student->id }})" class="p-2 hover:bg-gray-100 cursor-pointer">

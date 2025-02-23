@@ -1,5 +1,6 @@
 @php
-    $classBox = 'overflow-hidden my-8 bg-white border border-gray-200 rounded-xl shadow-md dark:bg-neutral-800 dark:border-neutral-700';
+    $classBox =
+        'overflow-hidden my-8 bg-white border border-gray-200 rounded-xl shadow-md dark:bg-neutral-800 dark:border-neutral-700';
 @endphp
 
 <div class="flex flex-col {{ $classBox }}">
@@ -24,7 +25,7 @@
 
         <!-- Dropdown Menu -->
         <div class="flex justify-start items-center space-x-2 max-[800px]:mt-2">
-            <div class="hs-dropdown relative inline-flex">
+            {{-- <div class="hs-dropdown relative inline-flex">
                 <button id="hs-dropdown-with-icons" type="button"
                     class="hs-dropdown-toggle py-2.5 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                     aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
@@ -74,7 +75,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <x-select wire:model.live="perPage"></x-select>
         </div>
@@ -111,146 +112,150 @@
     <!-- Table -->
     <div class="overflow-x-auto -m-1.5">
         <div class="p-1.5 min-w-full inline-block align-middle">
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-                <thead class="bg-gray-50 dark:bg-neutral-800">
-                    <tr>
-                        <th scope="col" class="ps-6 py-3 text-start">
-                            #
-                        </th>
-
-                        <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
-                            <div class="flex items-center gap-x-2">
-                                <span
-                                    class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                    Name
-                                </span>
-                            </div>
-                        </th>
-
-                        <th scope="col" class="px-6 py-3 text-start">
-                            <div class="flex items-center gap-x-2">
-                                <span
-                                    class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                    Phone
-                                </span>
-                            </div>
-                        </th>
-
-                        <th scope="col" class="px-6 py-3 text-start">
-                            <div class="flex items-center gap-x-2">
-                                <span
-                                    class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                    Gender
-                                </span>
-                            </div>
-                        </th>
-
-                        <th scope="col" class="px-6 py-3 text-start">
-                            <div class="flex items-center gap-x-2">
-                                <span
-                                    class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                    Violations
-                                </span>
-                            </div>
-                        </th>
-
-                        <th scope="col" class="px-6 py-3 text-start">
-                            <div class="flex items-center gap-x-2">
-                                <span
-                                    class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                    Last Update
-                                </span>
-                            </div>
-                        </th>
-
-                        <th scope="col" class="px-6 py-3 text-end">
-                            Action
-                        </th>
-                    </tr>
-                </thead>
-
-                <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                    @foreach ($teachers as $teacher)
+            @if (count($teachers) === 0)
+                <x-empty-table class="h-full" />
+            @else
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                    <thead class="bg-gray-50 dark:bg-neutral-800">
                         <tr>
-                            <td class="size-px whitespace-nowrap">
-                                <div class="ps-6 py-3">
-                                    <label for="hs-at-with-checkboxes-1" class="flex">
-                                        <input type="checkbox"
-                                            class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                                            id="hs-at-with-checkboxes-1" value="{{ $teacher->id }}"
-                                            wire:key="{{ $teacher->id }}" wire:model.live="selected_id">
-                                        <span class="sr-only">Checkbox</span>
-                                    </label>
+                            <th scope="col" class="ps-6 py-3 text-start">
+                                #
+                            </th>
+
+                            <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
+                                <div class="flex items-center gap-x-2">
+                                    <span
+                                        class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                        Name
+                                    </span>
                                 </div>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
-                                    <div class="flex items-center gap-x-3">
-                                        @php
-                                            $defaultPhoto =
-                                                $teacher->gender == 'L'
-                                                    ? 'profile_photos/man.png'
-                                                    : 'profile_photos/woman.png';
-                                        @endphp
-                                        <img class="inline-block size-[38px] rounded-full"
-                                            src="{{ $teacher->photo ? Storage::url($teacher->photo) : Storage::url($defaultPhoto) }}"
-                                            alt="Teacher Poto">
-                                        <div class="grow">
-                                            <span
-                                                class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ $teacher->name }}</span>
-                                            <span
-                                                class="block text-sm text-gray-500 dark:text-neutral-500">{{ $teacher->email }}</span>
+                            </th>
+
+                            <th scope="col" class="px-6 py-3 text-start">
+                                <div class="flex items-center gap-x-2">
+                                    <span
+                                        class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                        Phone
+                                    </span>
+                                </div>
+                            </th>
+
+                            <th scope="col" class="px-6 py-3 text-start">
+                                <div class="flex items-center gap-x-2">
+                                    <span
+                                        class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                        Gender
+                                    </span>
+                                </div>
+                            </th>
+
+                            <th scope="col" class="px-6 py-3 text-start">
+                                <div class="flex items-center gap-x-2">
+                                    <span
+                                        class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                        Violations
+                                    </span>
+                                </div>
+                            </th>
+
+                            {{-- <th scope="col" class="px-6 py-3 text-start">
+                                <div class="flex items-center gap-x-2">
+                                    <span
+                                        class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                        Last Update
+                                    </span>
+                                </div>
+                            </th> --}}
+
+                            <th scope="col" class="px-6 py-3 text-end">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                        @foreach ($teachers as $teacher)
+                            <tr>
+                                <td class="size-px whitespace-nowrap">
+                                    <div class="ps-6 py-3">
+                                        <label for="hs-at-with-checkboxes-1" class="flex">
+                                            <input type="checkbox"
+                                                class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                                                id="hs-at-with-checkboxes-1" value="{{ $teacher->id }}"
+                                                wire:key="{{ $teacher->id }}" wire:model.live="selected_id">
+                                            <span class="sr-only">Checkbox</span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="size-px whitespace-nowrap">
+                                    <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
+                                        <div class="flex items-center gap-x-3">
+                                            @php
+                                                $defaultPhoto =
+                                                    $teacher->gender == 'L'
+                                                        ? 'profile_photos/man.png'
+                                                        : 'profile_photos/woman.png';
+                                            @endphp
+                                            <img class="inline-block size-[38px] rounded-full"
+                                                src="{{ $teacher->photo ? Storage::url($teacher->photo) : Storage::url($defaultPhoto) }}"
+                                                alt="Teacher Poto">
+                                            <div class="grow">
+                                                <span
+                                                    class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ $teacher->name }}</span>
+                                                <span
+                                                    class="block text-sm text-gray-500 dark:text-neutral-500">{{ $teacher->email }}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="h-px w-72 whitespace-nowrap">
-                                <div class="px-6 py-3">
-                                    <span
-                                        class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ $teacher->phone }}</span>
-                                </div>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <div class="px-6 py-3">
-                                    @if ($teacher->gender === 'L')
+                                </td>
+                                <td class="h-px w-72 whitespace-nowrap">
+                                    <div class="px-6 py-3">
                                         <span
-                                            class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-blue-200 text-blue-800 rounded-md dark:bg-teal-500/10 dark:text-teal-500">
-                                            Male
+                                            class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ $teacher->phone }}</span>
+                                    </div>
+                                </td>
+                                <td class="size-px whitespace-nowrap">
+                                    <div class="px-6 py-3">
+                                        @if ($teacher->gender === 'L')
+                                            <span
+                                                class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-blue-200 text-blue-800 rounded-md dark:bg-teal-500/10 dark:text-teal-500">
+                                                Male
+                                            </span>
+                                        @else
+                                            <span
+                                                class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-pink-200 text-pink-800 rounded-md dark:bg-teal-500/10 dark:text-teal-500">
+                                                Female
+                                            </span>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="h-px w-72 whitespace-nowrap">
+                                    <div class="px-6 py-3">
+                                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+                                            {{ \App\Models\Violation::where('teacher_id', $teacher->id)->count() }}
                                         </span>
-                                    @else
-                                        <span
-                                            class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-pink-200 text-pink-800 rounded-md dark:bg-teal-500/10 dark:text-teal-500">
-                                            Female
+                                    </div>
+                                </td>
+                                {{-- <td class="size-px whitespace-nowrap">
+                                    <div class="px-6 py-3">
+                                        <span class="text-sm text-gray-500 dark:text-neutral-500">
+                                            {{ \Carbon\Carbon::parse($teacher->updated_at)->format('d M Y, H:i') }}
                                         </span>
-                                    @endif
-                                </div>
-                            </td>
-                            <td class="h-px w-72 whitespace-nowrap">
-                                <div class="px-6 py-3">
-                                    <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
-                                        {{ \App\Models\Violation::where('teacher_id', $teacher->id)->count() }}
-                                    </span>
-                                </div>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <div class="px-6 py-3">
-                                    <span class="text-sm text-gray-500 dark:text-neutral-500">
-                                        {{ \Carbon\Carbon::parse($teacher->updated_at)->format('d M Y, H:i') }}
-                                    </span>
-                                </div>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <div class="px-6 py-1.5">
-                                    <button type="button" wire:click.prevent="edit({{ $teacher->id }})"
-                                        class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500">
-                                        Edit
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                                    </div>
+                                </td> --}}
+                                <td class="size-px whitespace-nowrap">
+                                    <div class="px-6 py-1.5">
+                                        <button type="button" wire:click.prevent="edit({{ $teacher->id }})"
+                                            class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500">
+                                            Edit
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
         </div>
     </div>
     <!-- End Table -->

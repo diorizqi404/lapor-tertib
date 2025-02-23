@@ -20,17 +20,17 @@
         <!-- Chart Pelanggaran Per Kategori -->
         <div
             class="max-[1400px]:col-span-1 max-[900px]:col-span-3 flex justify-center flex-col items-center p-4 bg-white shadow rounded-lg h-[29rem]">
-            <h2 class="text-2xl font-semibold mb-2">Violation Categories</h2>
-            @if ($violationsByCategory)
+            <h2 class="text-2xl font-semibold mb-2">Top 5 Sekolah Pelanggaran Tertinggi</h2>
+            @if ($topSchoolViolations)
                 <div class="w-[80%] max-[1800px]:w-[110%] max-[900px]:w-[60%] max-[600px]:w-full"
-                    id="violationsByCategoryChart"></div>
+                    id="topSchoolViolationsChart"></div>
             @else
                 <x-empty-table class="h-full" />
             @endif
         </div>
 
         <!-- Top 5 Siswa Pelanggaran -->
-        <div class="col-span-1 max-[1400px]:col-span-2 max-[900px]:col-span-3 bg-white p-4 shadow rounded-lg">
+        {{-- <div class="col-span-1 max-[1400px]:col-span-2 max-[900px]:col-span-3 bg-white p-4 shadow rounded-lg">
             <h2 class="text-xl font-semibold mb-4">Top 5 Siswa Pelanggar Tertinggi</h2>
             <ul class="space-y-2 h-96">
                 @if ($topViolatingStudents)
@@ -59,11 +59,11 @@
                     <x-empty-table class="h-full" />
                 @endif
             </ul>
-        </div>
+        </div> --}}
 
 
         <!-- Top 5 Guru Pelapor -->
-        @if (Auth::user()->role === 'admin')
+        {{-- @if (Auth::user()->role === 'admin')
             <div class="col-span-1 max-[1400px]:col-span-2 max-[900px]:col-span-3 bg-white p-4 shadow rounded-lg">
                 <h2 class="text-xl font-semibold mb-4">Top 5 Guru Pelapor</h2>
                 <ul class="space-y-2">
@@ -72,14 +72,8 @@
                             <li class="flex justify-between items-center bg-white border-b-2 p-2">
                                 <div class="flex items-center">
                                     <h1 class="text-xl font-bold mr-4">{{ $index + 1 }}</h1>
-                                    @php
-                                        $defaultPhoto =
-                                            $teacher['gender'] == 'L'
-                                                ? 'profile_photos/man.png'
-                                                : 'profile_photos/woman.png';
-                                    @endphp
-                                    <img src="{{ $teacher['photo'] ? Storage::url($teacher['photo']) : Storage::url($defaultPhoto) }}"
-                                        alt="Student Photo" class="w-12 h-12 rounded-full">
+                                    <img src="{{ Storage::url($teacher['photo']) }}" alt="Teacher Photo"
+                                        class="w-12 h-12 rounded-full">
                                     <h1 class="ml-4 text-lg">
                                         {{ $teacher['name'] }}
                                     </h1>
@@ -94,7 +88,7 @@
                     @endif
                 </ul>
             </div>
-        @endif
+        @endif --}}
 
         <!-- Newest Violations -->
         <div class="col-span-1 max-[900px]:col-span-3 bg-white p-6 shadow rounded-lg">
@@ -106,18 +100,15 @@
                         <li class="flex justify-between items-center bg-blue-100 border border-blue-500 rounded-md p-2">
                             <div class="flex flex-col">
                                 <h1 class="text-base">
-                                    {{ $nw['student']['name'] }}
+                                    {{ $nw['violation_category']['name'] }}
                                 </h1>
                                 <p class="text-sm text-gray-600">
-                                    {{ $nw['violation_category']['name'] }}
+                                    {{ $nw['school']['name'] }}
                                 </p>
                             </div>
                             <p class="text-base text-gray-600">
                                 {{ \Carbon\Carbon::parse($nw['created_at'])->diffForHumans() }}
                             </p>
-                            {{-- <h1 class="font-semibold">
-                    {{ \Carbon\Carbon::parse($nw['created_at'])->diffForHumans() }}
-                </h1> --}}
                         </li>
                     @endforeach
                 @else
@@ -143,12 +134,12 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             initViolationDayChart();
-            initViolationCategoryChart();
+            initTopSchoolViolationsChart();
         });
 
         document.addEventListener("livewire:navigated", function() {
             initViolationDayChart();
-            initViolationCategoryChart();
+            initTopSchoolViolationsChart();
         });
 
         function initViolationDayChart() {
@@ -179,7 +170,7 @@
             }
         }
 
-        function initViolationCategoryChart() {
+        function initTopSchoolViolationsChart() {
             var options = {
                 chart: {
                     type: 'donut'
@@ -187,11 +178,11 @@
                 legend: {
                     position: 'bottom'
                 },
-                series: @json(array_column($violationsByCategory, 'total')),
-                labels: @json(array_column($violationsByCategory, 'name'))
+                series: @json(array_column($topSchoolViolations, 'total')),
+                labels: @json(array_column($topSchoolViolations, 'school_name'))
             }
 
-            var chartElement = document.querySelector("#violationsByCategoryChart");
+            var chartElement = document.querySelector("#topSchoolViolationsChart");
 
             if (chartElement) {
                 chartElement.innerHTML = "";
@@ -216,32 +207,6 @@
             }],
             xaxis: {
                 categories: @json(array_keys($violationsByMonth))
-            }
-        }).render();
-
-        new ApexCharts(document.querySelector("#violationsByClassChart"), {
-            chart: {
-                type: 'bar'
-            },
-            series: [{
-                name: "Jumlah Pelanggaran",
-                data: @json(array_values($violationsByClass))
-            }],
-            xaxis: {
-                categories: @json(array_keys($violationsByClass))
-            }
-        }).render();
-
-        new ApexCharts(document.querySelector("#violationsByDepartmentChart"), {
-            chart: {
-                type: 'bar'
-            },
-            series: [{
-                name: "Jumlah Siswa",
-                data: @json(array_values($violationsByDepartment))
-            }],
-            xaxis: {
-                categories: @json(array_keys($violationsByDepartment))
             }
         }).render();
     </script>

@@ -9,6 +9,7 @@ use App\Livewire\Admin\Dashboard as DashboardAdmin;
 use App\Livewire\Admin\Punishment;
 use App\Livewire\Student\SearchStudent;
 use App\Livewire\Student\StudentInfo;
+use App\Livewire\Superadmin\Dashboard as DashboardSuperadmin;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
@@ -21,8 +22,8 @@ require __DIR__.'/auth.php';
 
 //halaman dashboard untuk superadmin
 Route::middleware([\App\Http\Middleware\SuperAdmin::class])->group(function () {
-    Route::view('/superadmin', 'livewire.superadmin.dashboard')
-        ->name('superadmin');
+    Route::get('/superadmin', DashboardSuperadmin::class)
+        ->name('superadmin.dashboard');
 });
 
 //halaman dashboard untuk admin

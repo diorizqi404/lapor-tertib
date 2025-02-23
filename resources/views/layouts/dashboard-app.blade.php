@@ -11,8 +11,10 @@
     @livewireStyles
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
 </head>
 
 <body class="bg-gray-100 dark:bg-neutral-800 dark:text-white">
@@ -45,7 +47,7 @@
                 <!-- Breadcrumb -->
                 <ol class="ms-3 flex items-center whitespace-nowrap">
                     <li class="flex items-center text-sm text-gray-800 dark:text-neutral-400">
-                        Application Layout
+                        Dashboard
                         <svg class="shrink-0 mx-3 overflow-visible size-2.5 text-gray-400 dark:text-neutral-500"
                             width="16" height="16" viewBox="0 0 16 16" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
@@ -54,7 +56,24 @@
                         </svg>
                     </li>
                     <li class="text-sm font-semibold text-gray-800 truncate dark:text-neutral-400" aria-current="page">
-                        Dashboardssssssssssssss
+
+                        @if (request()->routeIs('admin.dashboard') || request()->routeIs('superadmin.dashboard'))
+                            Overview
+                        @elseif (request()->routeIs('admin.teacher'))
+                            Teacher Management
+                        @elseif (request()->routeIs('admin.academic'))
+                            Academic Structure
+                        @elseif (request()->routeIs('admin.student'))
+                            Student Management
+                        @elseif (request()->routeIs('admin.violation-category'))
+                            Violation Category Management
+                        @elseif (request()->routeIs('admin.punishment'))
+                            Punishment Management
+                        @elseif (request()->routeIs('admin.violations'))
+                            Violations
+                        @elseif (request()->routeIs('profile'))
+                            Profile
+                        @endif
                     </li>
                 </ol>
                 <!-- End Breadcrumb -->
@@ -77,7 +96,6 @@
     <!-- End Content -->
     <!-- ========== END MAIN CONTENT ========== -->
 
-    <x-chatbot />
     <script src="./node_modules/preline/dist/preline.js"></script>
     @livewireScripts
 </body>

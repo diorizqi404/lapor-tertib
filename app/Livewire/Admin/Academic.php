@@ -62,17 +62,17 @@
 
             $departments = Department::where('school_id', $this->school_id)
                 ->withCount('classes')
-                ->paginate($this->perPage);
+                ->get();
 
             $grades = Grade::where('school_id', $this->school_id)
-                ->paginate($this->perPage);
+                ->get();
 
             $classes = Classes::where('school_id', $this->school_id)
                 ->with('department', 'grade')
-                ->paginate($this->perPage);
+                ->get();
 
             $academic_years = AcademicYear::where('school_id', $this->school_id)
-                ->paginate($this->perPage);
+                ->get();
 
             return view('livewire.admin.academic-menu.academic', [
                 'departments' => $departments,

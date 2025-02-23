@@ -7,12 +7,16 @@ use Livewire\WithPagination;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Violation;
+use App\Models\AcademicYear;
 use App\Models\Punishment;
 use App\Models\Setting;
 use App\Models\ViolationCategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Livewire\Attributes\On;
+use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ViolationsExport;
 
 class Violations extends Component
 {
@@ -30,11 +34,19 @@ class Violations extends Component
     public $searchCategory = '';
     public $selectedCategory = null;
 
-    protected $listeners = ['student-selected' => 'onStudentSelected'];
+    public $dateType = 'date';
+    public $value = '';
+
+    protected $listeners = ['student-selected' => 'onStudentSelected', 'filterUpdated'];
+
+    public function filterUpdated($dateType, $value)
+    {
+        $this->dateType = $dateType;
+        $this->value = $value;
+    }
 
     public function onStudentSelected($student)
     {
-        // $student adalah data lengkap siswa yang dipilih
         $this->selectedStudent = $student;
     }
 
@@ -43,7 +55,30 @@ class Violations extends Component
         $this->school_id = Auth::user()->school_id;
 
         $query = Violation::where('school_id', $this->school_id)
-            ->with('teacher', 'student', 'ViolationCategory');
+            ->with('teacher', 'student', 'violationCategory')
+            ->where(function ($q) {
+                $q->whereHas('student', function ($q) {
+                    $q->where('name', 'like', '%' . $this->keyword . '%');
+                })->orWhereHas('teacher', function ($q) {
+                    $q->where('name', 'like', '%' . $this->keyword . '%');
+                })->orWhereHas('violationCategory', function ($q) {
+                    $q->where('name', 'like', '%' . $this->keyword . '%');
+                });
+            });
+
+        if ($this->value) {
+            if ($this->dateType === 'date') {
+                $query->whereDate('datetime', $this->value);
+            } elseif ($this->dateType === 'week') {
+                $query->whereBetween('datetime', [
+                    Carbon::parse($this->value)->startOfWeek(),
+                    Carbon::parse($this->value)->endOfWeek(),
+                ]);
+            } elseif ($this->dateType === 'month') {
+                $query->whereMonth('datetime', Carbon::parse($this->value)->month)
+                    ->whereYear('datetime', Carbon::parse($this->value)->year);
+            }
+        }
 
         $violations = $query->orderBy('datetime', 'desc')->paginate($this->perPage);
 
@@ -54,19 +89,19 @@ class Violations extends Component
         return view('livewire.admin.violation-menu.violation.violations', [
             'violations' => $violations,
             'selectedStudent' => $this->selectedStudent,
-            'categories' => $categories,
+            'categories' => $categories
         ]);
     }
 
-    // public function selectCategory($categoryId)
-    // {
-    //     $this->selectedCategory = ViolationCategory::where('school_id', $this->school_id)
-    //         ->findOrFail($categoryId);
+    public function selectCategory($categoryId)
+    {
+        $this->selectedCategory = ViolationCategory::where('school_id', $this->school_id)
+            ->findOrFail($categoryId);
 
 
-    //     // Reset pencarian setelah memilih
-    //     $this->searchCategory = '';
-    // }
+        // Reset pencarian setelah memilih
+        $this->searchCategory = '';
+    }
 
 
     public function openModal()
@@ -145,38 +180,57 @@ class Violations extends Component
 
         $punishment = $min_point ? $min_point->name : 'Tidak mendapat hukuman';
 
-        $template = Setting::where('school_id', $this->school_id)->value('message_template');
+        $setting = Setting::where('school_id', $this->school_id)->first();
+        $selected_fields = $setting->message_template;
 
-        if (empty($template)) {
-            $template = env('DEFAULT_MESSAGE_TEMPLATE');
+        $pesan =  "Laporan Pelanggaran!\n";
+
+        if (in_array('student_name', $selected_fields)) {
+            $pesan .= "Nama Siswa: {$this->selectedStudent['name']}\n";
+        }
+        if (in_array('violation_name', $selected_fields)) {
+            $pesan .= "Pelanggaran: {$category->name}\n";
+        }
+        if (in_array('teacher_name', $selected_fields)) {
+            $pesan .= "Guru Pelapor: {$teacher->name}\n";
+        }
+        if (in_array('description', $selected_fields)) {
+            $pesan .= "Deskripsi: {$this->description}\n";
+        }
+        if (in_array('punishment', $selected_fields)) {
+            $pesan .= "Hukuman: {$punishment}\n";
         }
 
-        $data = [
-            '{student_name}' => $this->selectedStudent["name"],
-            '{violation_name}' => $category->name,
-            '{teacher_name}' => $teacher->name,
-            '{description}' => $this->description,
-            '{punishment}' => $punishment
-        ];
+        // $template = Setting::where('school_id', $this->school_id)->value('message_template');
 
-        foreach ($data as $key => $value) {
-            if (strpos($template, $key) !== false) {
-                $template = str_replace($key, $value, $template);
-            }
-        }
+        // if (empty($template)) {
+        //     $template = env('DEFAULT_MESSAGE_TEMPLATE');
+        // }
 
-        $message = $template;
+        // $data = [
+        //     '{student_name}' => $this->selectedStudent["name"],
+        //     '{violation_name}' => $category->name,
+        //     '{teacher_name}' => $teacher->name,
+        //     '{description}' => $this->description,
+        //     '{punishment}' => $punishment
+        // ];
+
+        // foreach ($data as $key => $value) {
+        //     if (strpos($template, $key) !== false) {
+        //         $template = str_replace($key, $value, $template);
+        //     }
+        // }
+
+        // $message = $template;
 
         $notelp = $this->selectedStudent["parent_phone"];
 
-        $this->sendWa($notelp, $message);
+        $this->sendWa($notelp, $pesan);
 
         $this->dispatch('pelanggaran-created');
         flash()->success('Violation saved successfully');
         $this->closeModal();
         $this->resetInputFields();
-
-        
     }
 
     public function sendWa($notelp, $message)
@@ -209,12 +263,35 @@ class Violations extends Component
 
         DB::transaction(function () {
             Violation::where('school_id', $this->school_id)
-            ->whereIn('id', $this->selected_id)
-            ->lockForUpdate()
-            ->delete();
+                ->whereIn('id', $this->selected_id)
+                ->lockForUpdate()
+                ->delete();
         });
 
         flash()->success('Violation deleted successfully');
         $this->selected_id = [];
+    }
+
+    public function resetPoint()
+    {
+        $start_date = AcademicYear::where('school_id', $this->school_id)
+            ->where('status', 'active')
+            ->first()->start_date;
+
+        DB::transaction(function () use ($start_date) {
+            Violation::where('school_id', $this->school_id)
+                ->where('datetime', '<', $start_date)
+                ->lockForUpdate()
+                ->update([
+                    'point' => 0,
+                ]);
+        });
+
+        flash()->success('Point resetted successfully');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new ViolationsExport(), 'Violations.xlsx');
     }
 }

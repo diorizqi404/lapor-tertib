@@ -15,8 +15,17 @@ class SuperadminSeeder extends Seeder
      */
     public function run(): void
     {
+        $schoolId = DB::table('schools')->insertGetId([
+            'name' => 'Default School',
+            'email' => 'default@example.com',
+            'address' => 'Default Address',
+            'phone' => '0000000000',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         DB::table('users')->insert([
-            'school_id' => '0',
+            'school_id' => $schoolId,
             'role' => 'superadmin',
             'name' => 'Super Admin',
             'email' => 'superadmin@example.com',
@@ -27,23 +36,23 @@ class SuperadminSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        DB::table('schools')->insert([
-            'name' => 'SMKN 2 Surabaya',
-            'email' => 'smkn2.sby@example.com',
-            'address' => 'JL TGP',
-            'phone' => '0123456789',
-        ]);
+        // DB::table('schools')->insert([
+        //     'name' => 'SMKN 2 Surabaya',
+        //     'email' => 'smkn2.sby@example.com',
+        //     'address' => 'JL TGP',
+        //     'phone' => '0123456789',
+        // ]);
 
-        DB::table('users')->insert([
-            'school_id' => '1',
-            'role' => 'admin',
-            'name' => 'Admin SMKN 2',
-            'email' => 'admin2@mail.com',
-            'phone' => '1234567890',
-            'gender' => 'L',
-            'password' => Hash::make('password'),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        // DB::table('users')->insert([
+        //     'school_id' => '1',
+        //     'role' => 'admin',
+        //     'name' => 'Admin SMKN 2',
+        //     'email' => 'admin2@mail.com',
+        //     'phone' => '1234567890',
+        //     'gender' => 'L',
+        //     'password' => Hash::make('password'),
+        //     'created_at' => now(),
+        //     'updated_at' => now(),
+        // ]);
     }
 }
