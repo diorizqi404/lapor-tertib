@@ -28,7 +28,6 @@
         <!-- End Content -->
         <!-- ========== END MAIN CONTENT ========== -->
 
-        <x-chatbot />
         <script src="./node_modules/preline/dist/preline.js"></script>
         @livewireScripts
 </body>

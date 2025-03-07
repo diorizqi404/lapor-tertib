@@ -1,6 +1,6 @@
-<?php
+@php
 $classBox = 'my-4 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-neutral-800 dark:border-neutral-700';
-?>
+@endphp
 
 <div class="flex flex-col {{ $classBox }}">
 
